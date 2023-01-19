@@ -19,14 +19,14 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-// max 11 kere shift rotate yapmamız lazım 
-// bu modül ile veri rotate shift işlemine sokulur ve sonuc üzerinden istediğimiz uzunluktaki veri çekilmiş olur.
+// max 11 kere shift rotate yapmamÄ±z lazÄ±m 
+// bu modÃ¼l ile veri rotate shift iÅŸlemine sokulur ve sonuc Ã¼zerinden istediÄŸimiz uzunluktaki veri Ã§ekilmiÅŸ olur.
 
 module rotate_left#(parameter kaydir=5)(
     input clk_i,rst_i,en_i,
     input [31:0] sayi_i,
     output [31:0] kaydirilmis_sayi_o,
-    output [kaydir-1:0] cekilen_veri_o  // kaydırma sonucunda olusan verinin elde edilmesini istenen kismi // ac ve dc nin girişine bağlanmalı
+    output [kaydir-1:0] cekilen_veri_o  // kaydÄ±rma sonucunda olusan verinin elde edilmesini istenen kismi // ac ve dc nin giriÅŸine baÄŸlanmalÄ±
     );
     reg [31:0] kaydirilmis_sayi_deger;
     reg [31:0] sayi_deger;
@@ -112,7 +112,72 @@ module rotate_left#(parameter kaydir=5)(
                         else if(kaydir == 16)begin                                    
                             kaydirilmis_sayi_deger = {sayi_deger[15:0],sayi_deger[31:16]};    
                             durum = 2;
-                        end else begin                                                
+                        end 
+                        else if(kaydir == 17)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[14:0],sayi_deger[31:15]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 18)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[13:0],sayi_deger[31:14]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 19)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[12:0],sayi_deger[31:13]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 20)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[11:0],sayi_deger[31:12]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 21)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[10:0],sayi_deger[31:11]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 22)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[9:0],sayi_deger[31:10]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 23)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[8:0],sayi_deger[31:9]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 24)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[7:0],sayi_deger[31:8]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 25)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[6:0],sayi_deger[31:7]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 26)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[5:0],sayi_deger[31:6]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 27)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[4:0],sayi_deger[31:5]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 28)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[3:0],sayi_deger[31:4]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 29)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[2:0],sayi_deger[31:3]};    
+                            durum = 2; // 00011111111111111111111111111111
+                        end
+                        else if(kaydir == 30)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[1:0],sayi_deger[31:2]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 31)begin                                    
+                            kaydirilmis_sayi_deger = {sayi_deger[0:0],sayi_deger[31:1]};    
+                            durum = 2;
+                        end
+                        else if(kaydir == 32)begin
+                            kaydirilmis_sayi_deger = sayi_deger; // 32 bit kaydÄ±rÄ±nca sayÄ±nÄ±n kendisi alÄ±nÄ±r
+                            durum = 2; 
+                        end
+                        else begin                                                
                             kaydirilmis_sayi_deger = 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;                     
                         end 
                     end

@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-// 76 saykýl sürüyor
+// 76 saykÄ±l sÃ¼rÃ¼yor
 module fp_carpma(
     input clk_i,rst_i,en_i,
     input [31:0] x1_i,x2_i,
@@ -34,21 +34,26 @@ module fp_carpma(
                 case (durum)
                     0:begin
                         if(sayac <=3)begin
-                            say_x1=x1_i;
-                            say_x2=x2_i;
-                            sign_1=say_x1[31];
-                            sign_2=say_x2[31];
-                            exp_1=say_x1[30:23];
-                            exp_2=say_x2[30:23];
-                            man_1[22:0]=say_x1[22:0];
-                            man_2[22:0]=say_x2[22:0];
+                            if(x1_i == 0 || x2_i == 0)begin
+                                durum = 5;
+                            end else begin 
+                                say_x1=x1_i;
+                                say_x2=x2_i;
+                                sign_1=say_x1[31];
+                                sign_2=say_x2[31];
+                                exp_1=say_x1[30:23];
+                                exp_2=say_x2[30:23];
+                                man_1[22:0]=say_x1[22:0];
+                                man_2[22:0]=say_x2[22:0];
+                                
+                                sign = sign_1  ^  sign_2;
+                                
+                                exp = exp_1 + exp_2  - 8'b0111_1111;
+                                
+                                man_1[23]={1'b1};
+                                man_2[23]={1'b1};
+                            end
                             
-                            sign = sign_1  ^  sign_2;
-                            
-                            exp = exp_1 + exp_2  - 8'b0111_1111;
-                            
-                            man_1[23]={1'b1};
-                            man_2[23]={1'b1};
                             
                         end else begin
                             durum=1;
@@ -94,8 +99,13 @@ module fp_carpma(
                         end  
                     end
                     5:begin
-                        snc = {sign,exp,man};
-                        durum = 6;
+                        if(x1_i == 0 || x2_i == 0)begin 
+                            snc = 0;
+                            durum = 6;
+                        end else begin
+                            snc = {sign,exp,man};
+                            durum = 6;
+                        end
                     end
                     6:begin
                         sign_1 = 0;

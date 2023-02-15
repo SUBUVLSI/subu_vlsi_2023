@@ -452,7 +452,7 @@ module inverse_AC(
                         else if(kaydirma == 12)begin
                             if(ac_deger12 == 12'b111111110100)begin
                                 cikis_sifir = 4'b0010; // 2
-                                cikis_deger = 4'b1000; // 4
+                                cikis_deger = 4'b0100; // 4
                                 ram_deger0 = 12'b111111110100; // ramin ilk satırına ac_degeri yazilir
                                 durum = 25; // geldigi yerden bir sonraki yere / 24->25
                             end
@@ -1801,6 +1801,11 @@ module inverse_AC(
                             en_r3 = 1;                                                                              
                             durum = 2; // asil sayi icin kaydirma                                                                     
                         end 
+                        else if(cikis_deger == 4'b0100) begin
+                            // 2 bit rotate shift islemi                                                            
+                            en_r4 = 1;                                                                              
+                            durum = 2; // asil sayi icin kaydirma     
+                        end
                         else if(cikis_deger == 4'b0010) begin
                             // 2 bit rotate shift islemi                                                            
                             en_r2 = 1;                                                                              

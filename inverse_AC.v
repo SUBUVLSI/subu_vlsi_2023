@@ -38,12 +38,12 @@ module inverse_AC(
     reg [10:0] ram_deger_asil; // asil sayi ciktisi, signed olarak 8 bit yeter / ram e yazılacak
     reg [31:0] encoded_veri_cikti; // kaydirmalar sonucu kalan encoded_veri cikti
     reg [4:0] cikis_sifir,cikis_sifir_deger; // asil sayi onundeki 0 sayisi / ramde asil sayi onune yazilacak 
-    reg eob_kontrol= 0;
+    reg eob_kontrol= 0,eob_kontrol_oku = 0;
     integer kaydirma = 0,kaydirma1 = 0, kaydirma1_deger = 0; 
     // kaydirma = ilk kaydirma / kaydirma1 = toplam kaydirma => bunla beraber encoded_veri_i ne kadar kaydirilmis olacak o kontrol edilir ve sağ tafata biriken 0 sayisi kontrol edilmiş olur
     assign sagdaki_sifir_sayisi_o = kaydirma1_deger; // sagdaki 0 ların sayisi ile bir sonraki matrise gelecek degerlerin kontrolü
     assign ondeki_sifir_sayisi_o = cikis_sifir_deger;
-    assign eob_kontrol_o = eob_kontrol;
+    assign eob_kontrol_o = eob_kontrol_oku;
     assign encoded_veri_o = encoded_veri_cikti;
     assign ac_deger_o = ram_deger0;
     assign asil_deger_o = ram_deger_asil;
@@ -342,20 +342,20 @@ module inverse_AC(
                                 durum = 19; // geldigi yerden bir sonraki yere / 18->19
                             end
                             else if(ac_deger9 == 9'b111111000)begin
-                                cikis_sifir = 4'b0001; // 1
-                                cikis_deger = 4'b1000; // 8
+                                cikis_sifir = 4'b1000; // 8
+                                cikis_deger = 4'b0001; // 1
                                 ram_deger0 = 9'b111111000; // ramin ilk satırına ac_degeri yazilir
                                 durum = 19; // geldigi yerden bir sonraki yere / 18->19
                             end
                             else if(ac_deger9 == 9'b111111001)begin
-                                cikis_sifir = 4'b0001; // 1
-                                cikis_deger = 4'b1001; // 9
+                                cikis_sifir = 4'b1001; // 9
+                                cikis_deger = 4'b0001; // 1
                                 ram_deger0 = 9'b111111001; // ramin ilk satırına ac_degeri yazilir
                                 durum = 19; // geldigi yerden bir sonraki yere / 18->19
                             end
                             else if(ac_deger9 == 9'b111111010)begin
-                                cikis_sifir = 4'b0001; // 1
-                                cikis_deger = 4'b1010; // 10
+                                cikis_sifir = 4'b1010; // 10
+                                cikis_deger = 4'b0001; // 1
                                 ram_deger0 = 9'b111111010; // ramin ilk satırına ac_degeri yazilir
                                 durum = 19; // geldigi yerden bir sonraki yere / 18->19
                             end else begin
@@ -375,26 +375,33 @@ module inverse_AC(
                                 cikis_sifir = 4'b0000; // 0
                                 cikis_deger = 4'b1000; // 8
                                 ram_deger0 = 10'b1111110110; // ramin ilk satırına ac_degeri yazilir
-                                durum = 19; // geldigi yerden bir sonraki yere / 20->21
+                                durum = 21; // geldigi yerden bir sonraki yere / 20->21
                             end
                             else if(ac_deger10 == 10'b1111110111)begin
                                 cikis_sifir = 4'b0010; // 2
                                 cikis_deger = 4'b0011; // 3
                                 ram_deger0 = 10'b1111110111; // ramin ilk satırına ac_degeri yazilir
-                                durum = 19; // geldigi yerden bir sonraki yere / 20->21
+                                durum = 21; // geldigi yerden bir sonraki yere / 20->21
                             end
                             else if(ac_deger10 == 10'b1111111000)begin
                                 cikis_sifir = 4'b0100; // 4
                                 cikis_deger = 4'b0010; // 2
                                 ram_deger0 = 10'b1111111000; // ramin ilk satırına ac_degeri yazilir
-                                durum = 19; // geldigi yerden bir sonraki yere / 20->21
+                                durum = 21; // geldigi yerden bir sonraki yere / 20->21
                             end
+                            else if(ac_deger10 == 10'b1111111001)begin
+                                cikis_sifir = 4'b1011; // 11
+                                cikis_deger = 4'b0001; // 1
+                                ram_deger0 = 10'b1111111001; // ramin ilk satırına ac_degeri yazilir
+                                durum = 21; // geldigi yerden bir sonraki yere / 20->21
+                            end 
                             else if(ac_deger10 == 10'b1111111010)begin
                                 cikis_sifir = 4'b1100; // 12
                                 cikis_deger = 4'b0001; // 1
                                 ram_deger0 = 10'b1111111010; // ramin ilk satırına ac_degeri yazilir
-                                durum = 19; // geldigi yerden bir sonraki yere / 20->21
-                            end else begin
+                                durum = 21; // geldigi yerden bir sonraki yere / 20->21
+                            end 
+                            else begin
                                 cikis_sifir = 4'bxxxx; // tanımsız
                                 cikis_deger = 4'bxxx; // tanımsız
                                 en_r10 = 0; 
@@ -445,7 +452,7 @@ module inverse_AC(
                         else if(kaydirma == 12)begin
                             if(ac_deger12 == 12'b111111110100)begin
                                 cikis_sifir = 4'b0010; // 2
-                                cikis_deger = 4'b0011; // 3
+                                cikis_deger = 4'b1000; // 4
                                 ram_deger0 = 12'b111111110100; // ramin ilk satırına ac_degeri yazilir
                                 durum = 25; // geldigi yerden bir sonraki yere / 24->25
                             end
@@ -497,7 +504,19 @@ module inverse_AC(
                        
                        // 16 BITLIK 
                        else if(kaydirma == 16) begin
-                            if(ac_deger16 == 16'b1111111110000100)begin
+                            if(ac_deger16 == 16'b1111111110000010)begin
+                                cikis_sifir = 4'b0000; // 0
+                                cikis_deger = 4'b1001; // 9
+                                ram_deger0 = 16'b1111111110000010; // ramin ilk satırına ac_degeri yazilir
+                                durum = 29; // geldigi yerden bir sonraki yere / 28->29
+                            end 
+                            else if(ac_deger16 == 16'b1111111110000011)begin 
+                                cikis_sifir = 4'b0000; // 0
+                                cikis_deger = 4'b1010; // 10
+                                ram_deger0 = 16'b1111111110000011; // ramin ilk satırına ac_degeri yazilir
+                                durum = 29; // geldigi yerden bir sonraki yere / 28->29
+                            end
+                            else if(ac_deger16 == 16'b1111111110000100)begin
                                 cikis_sifir = 4'b0001; // 1
                                 cikis_deger = 4'b0110; // 6
                                 ram_deger0 = 16'b1111111110000100; // ramin ilk satırına ac_degeri yazilir
@@ -1625,8 +1644,8 @@ module inverse_AC(
                             durum = 2; // asil sayi icin kaydirma                                                                     
                         end 
                         else if(cikis_deger == 4'b0010) begin
-                            // 3 bit rotate shift islemi                                                            
-                            en_r3 = 1;                                                                              
+                            // 2 bit rotate shift islemi                                                            
+                            en_r2 = 1;                                                                              
                             durum = 2; // asil sayi icin kaydirma     
                         end
                         else if(cikis_deger == 4'b0001) begin
@@ -1667,21 +1686,12 @@ module inverse_AC(
                             en_r2 = 1;                                                                              
                             durum = 2; // asil sayi icin kaydirma     
                         end
-                        else if(cikis_deger == 4'b1000) begin
-                            // 8 bit rotate shift islemi                                                            
-                            en_r8 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b1001) begin
-                            // 9 bit rotate shift islemi                                                            
-                            en_r9 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b1010) begin
-                            // 10 bit rotate shift islemi                                                            
-                            en_r10 = 1;                                                                              
+                        else if(cikis_deger == 4'b0001) begin
+                            // 1 bit rotate shift islemi                                                            
+                            en_r1 = 1;                                                                              
                             durum = 2; // asil sayi icin kaydirma     
                         end else begin
+                        
                         end
                     end
                     
@@ -2217,6 +2227,7 @@ module inverse_AC(
                     35:begin
                         encoded_veri_cikti = encoded_veri_i << kaydirma1; // eob yi de sildik
                         kaydirma1_deger <=  kaydirma1;
+                        eob_kontrol_oku <= eob_kontrol;
                         cikis_sifir_deger <= cikis_sifir;
                         durum <= 36;
                     end
@@ -2231,39 +2242,39 @@ module inverse_AC(
                         gec = 0;
                         sayac = 0;
                         
-                        kaydirma = 0;
-                        kaydirma1 = 0;
-                        
+                        kaydirma <= 0;
+                        kaydirma1 <= 0;
+                        eob_kontrol <= 1'bx;
                         // encoded_veri_cikti= 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
-                        encoded_veri_deger = 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
+                        encoded_veri_deger <= 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
                         
-                        asil_deger1 = 1'bx; 
-                        asil_deger2 = 2'bxx; 
-                        asil_deger3 = 3'bxxx; 
-                        asil_deger4 = 4'bxxxx; 
-                        asil_deger5 = 5'bxxxxx; 
-                        asil_deger6 = 6'bxxxxxx;
-                        asil_deger7 = 7'bxxxxxxx; 
-                        asil_deger8 = 8'bxxxxxxxx; 
-                        asil_deger9 = 9'bxxxxxxxxx; 
-                        asil_deger10 = 10'bxxxxxxxxxx;
+                        asil_deger1 <= 1'bx; 
+                        asil_deger2 <= 2'bxx; 
+                        asil_deger3 <= 3'bxxx; 
+                        asil_deger4 <= 4'bxxxx; 
+                        asil_deger5 <= 5'bxxxxx; 
+                        asil_deger6 <= 6'bxxxxxx;
+                        asil_deger7 <= 7'bxxxxxxx; 
+                        asil_deger8 <= 8'bxxxxxxxx; 
+                        asil_deger9 <= 9'bxxxxxxxxx; 
+                        asil_deger10 <= 10'bxxxxxxxxxx;
                         
-                        ac_deger1 = 1'bx;        
-                        ac_deger2 = 2'bxx;       
-                        ac_deger3 = 3'bxxx;      
-                        ac_deger4 = 4'bxxxx;     
-                        ac_deger5 = 5'bxxxxx;    
-                        ac_deger6 = 6'bxxxxxx;   
-                        ac_deger7 = 7'bxxxxxxx;  
-                        ac_deger8 = 8'bxxxxxxxx; 
-                        ac_deger9 = 9'bxxxxxxxxx;
-                        ac_deger10 = 10'bxxxxxxxxxx;
-                        ac_deger11 = 11'bxxxxxxxxxxx;
-                        ac_deger12 = 12'bxxxxxxxxxxxx;
-                        ac_deger13 = 13'bxxxxxxxxxxxxx;
-                        ac_deger14 = 14'bxxxxxxxxxxxxxx;
-                        ac_deger15 = 15'bxxxxxxxxxxxxxxx;
-                        ac_deger16 = 16'bxxxxxxxxxxxxxxxx;
+                        ac_deger1 <= 1'bx;        
+                        ac_deger2 <= 2'bxx;       
+                        ac_deger3 <= 3'bxxx;      
+                        ac_deger4 <= 4'bxxxx;     
+                        ac_deger5 <= 5'bxxxxx;    
+                        ac_deger6 <= 6'bxxxxxx;   
+                        ac_deger7 <= 7'bxxxxxxx;  
+                        ac_deger8 <= 8'bxxxxxxxx; 
+                        ac_deger9 <= 9'bxxxxxxxxx;
+                        ac_deger10 <= 10'bxxxxxxxxxx;
+                        ac_deger11 <= 11'bxxxxxxxxxxx;
+                        ac_deger12 <= 12'bxxxxxxxxxxxx;
+                        ac_deger13 <= 13'bxxxxxxxxxxxxx;
+                        ac_deger14 <= 14'bxxxxxxxxxxxxxx;
+                        ac_deger15 <= 15'bxxxxxxxxxxxxxxx;
+                        ac_deger16 <= 16'bxxxxxxxxxxxxxxxx;
                     end
                 endcase
             end else begin
@@ -2302,12 +2313,7 @@ module inverse_AC(
                 ac_deger15 = 15'bxxxxxxxxxxxxxxx;
                 ac_deger16 = 16'bxxxxxxxxxxxxxxxx;
                 
-                /*
-                ram_deger1 = 11'bxxxxxxxxxxx; 
-                ram_deger_asil = 11'bxxxxxxxxxxx;
-                ram_deger0  = 11'bxxxxxxxxxxx;
-                encoded_veri_cikti = 32'bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx;
-                */
+                
             end
         end
     end

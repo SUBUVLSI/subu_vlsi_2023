@@ -85,7 +85,6 @@ module erozyon(
                         erozyon_arr[7] <= 0;
                         erozyon_arr[8] <= 0;
                         
-                        cikti <= 0;
                     end
                 endcase
             end else begin

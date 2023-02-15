@@ -19,10 +19,10 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-// verıyı alt module yanlıs gonderıyor 
-// sadece 1 kez alt modulden verı okuyabılıyor
+// verÃ½yÃ½ alt module yanlÃ½s gonderÃ½yor 
+// sadece 1 kez alt modulden verÃ½ okuyabÃ½lÃ½yor
 
-module inverse_top(
+module decode_tb(
     input clk_i,rst_i,en_i,
     output reg son
     );
@@ -40,7 +40,7 @@ module inverse_top(
     
     // ENCODED VERI ICIN RAM
     integer encoded_satir = 0;
-    reg [12:0] addr_encoded_veri; // ramin satır sayısı bilinmiyor / 2^x = mem_satir
+    reg [12:0] addr_encoded_veri; // ramin satÃ½r sayÃ½sÃ½ bilinmiyor / 2^x = mem_satir
     reg we_encoded , en_encoded;
     reg [31:0] in_encoded;
     wire [31:0] out_encoded;
@@ -114,7 +114,7 @@ module inverse_top(
                         end
                     end 
                     2:begin
-                        in_encoded <= mem[ind]; //yazacağı veri zaten 8 bit direkt tek satıra aktanır
+                        in_encoded <= mem[ind]; //yazacaÃ°Ã½ veri zaten 8 bit direkt tek satÃ½ra aktanÃ½r
                         ind <= ind + 1;  // bir sonraki clockta artacak
                         durum <= 1;
                     end 
@@ -159,13 +159,13 @@ module inverse_top(
                     
                     // 4. VERIYI CEKEMIYOR / DATA DEGISMIYOR // DURUM 4 E GITMIYOR
                     5:begin
-                        // decode alt modülünden yeni veri icin sinyal bekleniyor
+                        // decode alt modÃ¼lÃ¼nden yeni veri icin sinyal bekleniyor
                         if(data_gonderme_ok == 1)begin // BU SINYAL DEGISMIYOR 
                             durum <= 4;
                         end
-                        // 64 lük veri decode edildi konvolüsyona gondermek icin ram e gidiyor 
+                        // 64 lÃ¼k veri decode edildi konvolÃ¼syona gondermek icin ram e gidiyor 
                         else if(decode_edildi == 1)begin 
-                            if(gec < 1)begin    // alt modülden ramdeki ilk veriyi okumak için
+                            if(gec < 1)begin    // alt modÃ¼lden ramdeki ilk veriyi okumak iÃ§in
                                 gec <= gec + 1;
                             end else begin
                               
@@ -232,7 +232,7 @@ module inverse_top(
         
 
     
-    // 32 bitlik ram / 2405 satır // 13
+    // 32 bitlik ram / 2405 satÃ½r // 13
     ram#(.V(32),.S(mem_satir),.A(13)) encoded_ram(
         .clk_i(clk_i),
         .en_i(en_encoded),
@@ -269,7 +269,7 @@ module inverse_top(
         
     );
     
-    // 8 bitlik ram / 76800 satır
+    // 8 bitlik ram / 76800 satÃ½r
     ram#(.V(8),.S(76800),.A(17)) decoded_ram(
         .clk_i(clk_i),
         .en_i(en_decoded),

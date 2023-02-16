@@ -123,9 +123,9 @@ always @(posedge clk_i) begin
                         durum=3;
                       end
             end 
-            3:begin // gauss yapýyor
+            3:begin 
                 if(en_m==1)begin 
-                    if(sayac<77)begin // gauss iþlemine sokuyor
+                  if(sayac<77)begin // median iþlemine sokuyor
                   
                         data_i0_m <= core_ram_out[0]  ;
                         data_i1_m <= core_ram_out[1]  ;

@@ -19,8 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-// verýyý alt module yanlýs gonderýyor 
-// sadece 1 kez alt modulden verý okuyabýlýyor
 
 module decode_tb(
     input clk_i,rst_i,en_i,

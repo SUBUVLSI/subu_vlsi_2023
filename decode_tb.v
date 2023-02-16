@@ -160,7 +160,7 @@ module decode_tb(
                     // 4. VERIYI CEKEMIYOR / DATA DEGISMIYOR // DURUM 4 E GITMIYOR
                     5:begin
                         // decode alt modülünden yeni veri icin sinyal bekleniyor
-                        if(data_gonderme_ok == 1)begin // BU SINYAL DEGISMIYOR 
+                        if(data_gonderme_ok == 1)begin 
                             durum <= 4;
                         end
                         // 64 lük veri decode edildi konvolüsyona gondermek icin ram e gidiyor 
@@ -173,7 +173,7 @@ module decode_tb(
                               durum <= 6;
                             end
                         end
-                        // ISLEM SONLANIR 
+                        // DECODE ISLEMI SONLANIR 
                         else if(satir_son_ram == max_row)begin
                             durum <= 8;
                         end else begin

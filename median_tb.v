@@ -4,14 +4,8 @@ module median_test(
   output s,
   output [7:0] okunan_veri
 
-);
-//ram bağlantısı
-  // reg [7:0] px;
-  // reg [7:0] data_ram;
-  // reg [17:0] addr_ram=0;
-  // reg we_ram=0;
-// gauss ve sobel alt bağlantıları
-    reg en_m; 
+
+  reg en_m; 
   reg [7:0] data_i0_m ;
   reg [7:0] data_i1_m ;
   reg [7:0] data_i2_m ;
@@ -26,9 +20,9 @@ module median_test(
   
   parameter deger1=76800;
   parameter deger2=75684;
-  reg [7:0] mem[0:deger1-1]; //ilk piksel değeri için 76800
-  reg [7:0] ram[0:deger1-1]; //ilk pikseş değeri için 76800
-  reg [7:0] ram1[0:deger2-1]; //gauss yaptık 76800
+  reg [7:0] mem[0:deger1-1]; //ilk piksel deÃ°eri iÃ§in 76800
+  reg [7:0] ram[0:deger1-1]; //ilk pikseÃ¾ deÃ°eri iÃ§in 76800
+  reg [7:0] ram1[0:deger2-1]; //gauss yaptÃ½k 75684
   reg [7:0] ram2[0:deger1-1];
   wire sonuc_done_m;
 
@@ -99,7 +93,7 @@ always @(posedge clk_i) begin
                  
             end
             1:begin 
-                if(ind<deger1)begin // piksel değerlerini diziye aktarıyor
+                if(ind<deger1)begin // piksel deÃ°erlerini diziye aktarÃ½yor
                     ram[ind]<=mem[ind];
                     ind<=ind+1;
                 end else begin
@@ -111,7 +105,7 @@ always @(posedge clk_i) begin
 
 
             2:begin
-                     if(sayac<2)begin // 3x3 lük değerleri alıyor
+                     if(sayac<2)begin // 3x3 lÃ¼k deÃ°erleri alÃ½yor
                         core_ram_out[0] <= ram[ind_m]; 
                         core_ram_out[1] <= ram[ind_m+1];
                         core_ram_out[2] <= ram[ind_m+2];
@@ -129,9 +123,9 @@ always @(posedge clk_i) begin
                         durum=3;
                       end
             end 
-            3:begin // gauss yapıyor
+            3:begin // gauss yapÃ½yor
                 if(en_m==1)begin 
-                    if(sayac<77)begin // gauss işlemine sokuyor
+                    if(sayac<77)begin // gauss iÃ¾lemine sokuyor
                   
                         data_i0_m <= core_ram_out[0]  ;
                         data_i1_m <= core_ram_out[1]  ;
@@ -149,14 +143,14 @@ always @(posedge clk_i) begin
                         durum=4;  
                     end
                 end else begin
-                durum=7; // durumu en sona bağla
+                durum=7;
                 end
             end 
             4:begin
                if(ram1_ind<75684)begin 
                    if(ind<318)begin
                        if(sonuc_done_m==1)begin
-                           ram1[ram1_ind]<=data_o_m; //değerleri diziye yazıyor
+                           ram1[ram1_ind]<=data_o_m; //deÃ°erleri diziye yazÃ½yor
                            ram1_ind<=ram1_ind+1;
                            ind_m<=ind_m+1;
                            ind<=ind+1;
@@ -176,7 +170,6 @@ always @(posedge clk_i) begin
                    ram1_ind<=0;
                    ind_m<=0;
                    sayac<=0;
-                   //sonuc_done_g<=0;
                    ind<=0; 
                    durum<=5;
                end 
@@ -208,7 +201,6 @@ always @(posedge clk_i) begin
                 if(ind<2)begin
                    ram2[sayac+321]<=0;
                    ind<=ind+1;
-                   //ram2_ind<=ram2_ind+1;
                    sayac<=sayac+1;
                end else begin
                    ind<=0;
@@ -231,15 +223,7 @@ always @(posedge clk_i) begin
       end 
    end
 endmodule           
-          
-//   ram ram_sonuc(
-//.aclk(clk_i),
-//.data_in(px),
-//.addr(addr_ram),
-//.we(we_ram),
-//.data_out(data_ram)
-//);      
-                
+              
 
                 
           

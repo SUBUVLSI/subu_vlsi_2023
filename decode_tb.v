@@ -5,7 +5,7 @@
 // 
 // Create Date: 27.01.2023 16:31:34
 // Design Name: 
-// Module Name: inverse_top
+// Module Name: decode_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -232,7 +232,7 @@ module decode_tb(
         
 
     
-    // 32 bitlik ram / 2405 satýr // 13
+    // 32 bitlik ram / 2405 satir // 13
     ram#(.V(32),.S(mem_satir),.A(13)) encoded_ram(
         .clk_i(clk_i),
         .en_i(en_encoded),
@@ -269,7 +269,7 @@ module decode_tb(
         
     );
     
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satir
     ram#(.V(8),.S(76800),.A(17)) decoded_ram(
         .clk_i(clk_i),
         .en_i(en_decoded),

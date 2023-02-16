@@ -134,7 +134,7 @@ module decode_tb(
                     end 
                     */
                     
-                    // VERIYI YANLIs GONDERIYOR 
+                    
                     4:begin
                         if(gec <= 2)begin
                             gec <= gec + 1;

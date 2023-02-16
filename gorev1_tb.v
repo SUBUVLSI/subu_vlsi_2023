@@ -5,7 +5,7 @@ module gorev_1(
     input rst_i,
     input en_i
     );
-    //gauss alt bağlantıları
+    //gauss alt baÃ°lantÃ½larÃ½
     reg en_g;
     reg [7:0] data_i0_g;
     reg [7:0] data_i1_g;
@@ -36,7 +36,7 @@ module gorev_1(
         .sonuc_done(sonuc_done_g)
     );
     
-    // sobel alt bağlantıları
+    // sobel alt baÃ°lantÃ½larÃ½
      reg en_s;
      reg [7:0] data_i0_s  ;
      reg [7:0] data_i1_s  ;
@@ -116,7 +116,7 @@ module gorev_1(
                 g_sayac<=g_sayac+1;
                 case(durum)
                     0:begin
-                        if(array_ind<deger)begin // 76800 değer aktarılıyor
+                        if(array_ind<deger)begin // 76800 deÃ°er aktarÃ½lÃ½yor
                             array[array_ind]<=mem[array_ind];
                             array_ind<=array_ind+1;
                         end else begin
@@ -125,7 +125,7 @@ module gorev_1(
                         end
                     end  
                     1:begin
-                        if(sayac<2)begin // 3x3 değerler alınıyor
+                        if(sayac<2)begin // 3x3 deÃ°erler alÃ½nÃ½yor
                              core_ram_out[0] <= array[ind_g]; 
                              core_ram_out[1] <= array[ind_g+1];
                              core_ram_out[2] <= array[ind_g+2];
@@ -143,7 +143,7 @@ module gorev_1(
                         end
                     end
                     2:begin
-                        if(en_g)begin // gauss yapılıyor. 75684 değer çıkıyor
+                        if(en_g)begin // gauss yapÃ½lÃ½yor. 75684 deÃ°er Ã§Ã½kÃ½yor
                             if(sayac<37)begin
                                  data_i0_g <= core_ram_out[0]  ; 
                                  data_i1_g <= core_ram_out[1]  ; 
@@ -160,11 +160,11 @@ module gorev_1(
                                 durum<=3;
                            end 
                         end else begin
-                            durum<=9; //en son duruma bağla
+                            durum<=9; 
                             sayac<=0;
                         end
                     end
-                    3:begin // çıkan değerler dizi1 in içine atılıyor. dizi1 75684.
+                    3:begin // Ã§Ã½kan deÃ°erler dizi1 in iÃ§ine atÃ½lÃ½yor. dizi1 75684.
                         if(array1_ind<deger1)begin
                             if(ind<318)begin
                                 if(sonuc_done_g)begin
@@ -200,7 +200,7 @@ module gorev_1(
                        
                     end 
                     4:begin 
-                             if(sayac<2)begin // 3x3 değerler alınıyor
+                             if(sayac<2)begin // 3x3 deÃ°erler alÃ½nÃ½yor
                              core_ram_out[0] <= array_1[ind_s]; 
                              core_ram_out[1] <= array_1[ind_s+1];
                              core_ram_out[2] <= array_1[ind_s+2];
@@ -219,7 +219,7 @@ module gorev_1(
                     end
                     5:begin
                          if(en_s)begin 
-                             if(sayac<71)begin // sobel işlemine sokuyor
+                             if(sayac<71)begin // sobel iÃ¾lemine sokuyor
                                data_i0_s <= core_ram_out[0]  ;
                                data_i1_s <= core_ram_out[1]  ;
                                data_i2_s <= core_ram_out[2]  ;
@@ -235,7 +235,7 @@ module gorev_1(
                                    durum=6;
                              end
                          end else begin
-                             durum=9; // en son çıkışa bağla
+                             durum=9; // en son Ã§Ã½kÃ½Ã¾a baÃ°la
                          end
                     end
                     6:begin 
@@ -291,12 +291,7 @@ module gorev_1(
                                    durum<=8;
                                end
                            end else begin
-                          //ic_sayac<=0;     
-                          //array2_ind<=0;   
-                          //ind<=0;          
-                          //array3_ind<=0;   
-                          //durum<=9;        
-                            
+           
                            end
                      end else begin
                          ic_sayac<=0;

@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module gorev6(
+module gorev6_tb(
     input clk_i,rst_i,en_i
     
     );
@@ -32,9 +32,6 @@ module gorev6(
     
     reg [7:0] mem [0:max_row-1];
     initial begin
-        //1.clk'ta çalýþacak. dosya okunacak
-        //binary olarak kaydedecek resmi
-        //veriler tamponda yani tamamý tek seferde alýndý
         $readmemb("D:\\vivado\\asil_resim.txt",mem);  
     end
     
@@ -57,7 +54,7 @@ module gorev6(
     reg [7:0] erozyon_arr [0:max_row-1];
     integer satir = 0;
     integer stn = 0;
-    integer ilk_ind = 0;
+    integer ilk_ind = 323;
     
     integer max_veri = 77924;
     reg [7:0] ilk_arr [0:77923];
@@ -70,9 +67,9 @@ module gorev6(
     integer i;
     ///////////
     initial begin
-    #76800
+    #768
      for (i = 0; i < max_veri; i = i + 1) begin
-        ilk_arr[i] = 0;
+        ilk_arr[i] <= 7'b00000000;
      end
     
    end
@@ -87,7 +84,7 @@ module gorev6(
                 sayac <= sayac + 1;
                 case(durum)     
                 
-                // GRAY2BW
+                    // GRAY2BW
                     0:begin
                         if(ind < max_row)begin
                             gray2bw_deger_gir <= mem[ind];
@@ -120,55 +117,38 @@ module gorev6(
                         durum <= 0;
                     end 
                    
-                    4:begin 
-                        if(ilk_ind < max_veri)begin // max_row
-                            if(satir < 323)begin  // 321
-                                ilk_arr[ilk_ind] <= 8'b00000000;
-                                satir <= satir + 1;
-                                ilk_ind <= ilk_ind + 1;
+                    4:begin
+                        if(ilk_ind < max_veri)begin
+                           if(stn < 240)begin 
+                                if(satir < 320)begin // 318
+                                    ilk_arr[ilk_ind] <=  gray2bw_arr[ind];
+                                    satir <= satir + 1;
+                                    ilk_ind <= ilk_ind + 1;
+                                    ind <= ind + 1;
+                                end else begin
+                                    satir <= 0;
+                                    stn <= stn + 1;
+                                    durum <= 5;
+                                end
                             end else begin
+                                ind <= 0;
+                                stn <= 0;
+                                ilk_ind <= 0;
                                 satir <= 0;
-                                durum <= 5; 
+                                durum <= 7;
                             end
                         end else begin
+                            ind <= 0;
+                            stn <= 0;
                             ilk_ind <= 0;
                             satir <= 0;
-                            stn <= 0;
-                            ind <= 0;
                             durum <= 7;
-                        end 
-                    end
-                   
-                    
-                    5:begin
-                        if(stn < 240)begin // 238
-                            if(satir < 320)begin // 318
-                                ilk_arr[ilk_ind] <=  gray2bw_arr[ind];
-                                satir <= satir + 1;
-                                ilk_ind <= ilk_ind + 1;
-                                ind <= ind + 1;
-                            end else begin
-                                satir <= 0;
-                                stn <= stn + 1;
-                                durum <= 6;
-                            end
-                        end else begin
-                            satir <= 0;
-                            stn <= 0;
-                            durum <= 4;
-                        end 
-                    end
-                    
-                    6:begin
-                        if(satir < 2)begin
-                            ilk_arr[ilk_ind] <= 8'b00000000;
-                            ilk_ind = ilk_ind + 1;
-                            satir <= satir + 1;
-                        end else begin
-                            satir <= 0;
-                            durum <= 5;
                         end
-                    end 
+                    end
+                    5:begin
+                        ilk_ind <= ilk_ind + 2;
+                        durum <= 4;
+                    end
                     
                     // KONVOLUSYON
                     7:begin 
@@ -245,7 +225,8 @@ module gorev6(
                         ind <= ind + 1;
                         durum <= 10;
                     end
-                    
+                
+               
                 endcase
             end 
         end 
@@ -258,10 +239,10 @@ module gorev6(
         y=$fopen("D:\\vivado\\gorev6_cikti.txt","w"); //  ?C:/Users/korze/Downloads/asil_resim_degerleri.txt
       end
         initial begin
-              #2947751
+              #3016227
               for (x = 0; x<max_row; x=x+1) 
                   $fwrite(y,"%d\n",son_arr[x]); 
-              #2949751
+              #3016227
               $fclose(y);
         end
     
@@ -273,10 +254,10 @@ module gorev6(
         f=$fopen("D:\\vivado\\gorev6_erozyon.txt","w"); //  ?C:/Users/korze/Downloads/asil_resim_degerleri.txt
       end
         initial begin
-              #2947751 //2847751
+              #3047751 //2847751
               for (j = 0; j<max_row; j=j+1) 
                   $fwrite(f,"%d\n",erozyon_arr[j]); 
-              #2949751
+              #3049751
               $fclose(f);
        end
        
@@ -324,7 +305,4 @@ module gorev6(
     );
     
 endmodule
-
-
-
 

@@ -51,9 +51,6 @@ module gorev6_top_tb(
     parameter max_row = 76800;
     reg [7:0] mem [0:max_row-1];
     initial begin
-        //1.clk'ta çalýþacak. dosya okunacak
-        //binary olarak kaydedecek resmi
-        //veriler tamponda yani tamamý tek seferde alýndý
         $readmemb("D:\\vivado\\asil_resim.txt",mem);  
     end
     
@@ -191,22 +188,7 @@ module gorev6_top_tb(
                         son_o <= 1;
                     end 
                     
-                    /*
-                    7:begin
-                        if(ind < max_row)begin
-                            cikti_mem[indis] <= data_o_ram2;
-                            addr_ram2 <= ind;
-                            ind <= ind + 1;
-                            
-                        end else begin
-                            durum <= 8;
-                        end
-                    end
-                    
-                    8:begin
-                        son_o <= 1;
-                    end
-                    */
+                  
                 endcase
             end else begin 
             end
@@ -231,7 +213,7 @@ module gorev6_top_tb(
     
     
     
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satÃ½r
     ram#(.V(8),.S(76800),.A(17)) RAM1(
         .clk_i(clk_i),
         .en_i(en_ram1),
@@ -256,7 +238,7 @@ module gorev6_top_tb(
     
 
 
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satÃ½r
     ram#(.V(8),.S(76800),.A(17)) RAM2(
         .clk_i(clk_i),
         .en_i(en_ram2),

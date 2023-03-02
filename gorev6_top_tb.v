@@ -107,7 +107,7 @@ module gorev6_top_tb(
                     3:begin
                         if(veri_al == 1)begin
                             if(ind < max_row)begin
-                                if(gec < 2)begin
+                                if(gec <10)begin // 2
                                     gec <= gec + 1;
                                     veri_i_gorev6 <= data_o_ram1;
                                 end else begin
@@ -187,8 +187,6 @@ module gorev6_top_tb(
                     7:begin
                         son_o <= 1;
                     end 
-                    
-                  
                 endcase
             end else begin 
             end
@@ -200,7 +198,7 @@ module gorev6_top_tb(
     
      initial begin 
         #7700
-        f=$fopen("D:\\vivado\\gorev6_top_deneme.txt","w"); 
+        f=$fopen("D:\\vivado\\gorev6_cikti.txt","w"); 
       end
         initial begin
               #4092556
@@ -213,7 +211,7 @@ module gorev6_top_tb(
     
     
     
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satır
     ram#(.V(8),.S(76800),.A(17)) RAM1(
         .clk_i(clk_i),
         .en_i(en_ram1),
@@ -238,7 +236,7 @@ module gorev6_top_tb(
     
 
 
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satır
     ram#(.V(8),.S(76800),.A(17)) RAM2(
         .clk_i(clk_i),
         .en_i(en_ram2),

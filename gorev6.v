@@ -1,4 +1,4 @@
-`timescale 100ns / 1ps
+`timescale 1ns / 1ps
 
 module gorev_6(
     input clk_i,rst_i,en_i,
@@ -40,7 +40,6 @@ module gorev_6(
     wire [7:0] veri_o_erozyon;
     reg [7:0] erozyon_deger;
     
-    reg [7:0] erozyon_arr [0:max_row-1]; // bunu kullanma direkt 0 lı olan diziye aktar 
     reg [17:0] satir = 0;
     reg [17:0] stn = 0;
     reg [17:0] ilk_ind = 323;
@@ -118,8 +117,7 @@ module gorev_6(
                         durum <= VERI_AL1;
                     end 
                  
-                 // GRAY2BW
-                        
+                 // GRAY2BW      
                     1:begin
                         durum_oku <= durum;
                         en_gray2bw <= 1;
@@ -142,6 +140,7 @@ module gorev_6(
                         durum_oku <= durum;
                         gray2bw_arr[indis] <= gray2bw_deger;
                         durum <= VERI_AL2;
+                        
                     end 
                    
                    // 0 lı olan diziye yaz
@@ -222,7 +221,6 @@ module gorev_6(
                     9:begin
                         durum_oku <= durum;
                         if(stn<320)begin // 318
-                            erozyon_arr[ind] <= erozyon_deger;
                             ind <= ind + 1;
                             satir <= satir + 1;
                             stn <= stn + 1;
@@ -258,7 +256,6 @@ module gorev_6(
                     end 
                     12:begin
                         durum_oku <= durum;
-                        //erozyon_arr[ind] <= erozyon_deger;
                         gray2bw_arr[indis] <= cikti;
                         indis <= indis + 1;
                         durum <= 7; 

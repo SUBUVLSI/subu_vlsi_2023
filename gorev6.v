@@ -1,23 +1,4 @@
-`timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 17.02.2023 13:12:43
-// Design Name: 
-// Module Name: gorev6
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+`timescale 100ns / 1ps
 
 module gorev_6(
     input clk_i,rst_i,en_i,
@@ -36,11 +17,9 @@ module gorev_6(
     parameter VERI_AL1 = 20, VERI_AL2 = 21, VERI_GONDER1 = 22, VERI_GONDER2 = 23;
     
     reg [5:0] durum = VERI_AL1;
-    integer sayac = 0, gec = 0,ind = 0;
+    reg [17:0] sayac = 0, gec = 0,ind = 0;
     
     
-    
-    reg [7:0] mem [0:max_row-1];
     
     reg islem_bitti;
     assign islem_bitti_o = islem_bitti;
@@ -51,7 +30,7 @@ module gorev_6(
     reg [7:0] veri_i_gray2bw;             
     reg [7:0] treshold_degeri = 140; 
     wire [7:0] veri_o_gray2bw; 
-    reg [7:0] gray2bw_deger;
+    reg [7:0] gray2bw_deger; // direkt diziye yaz
     reg [7:0] gray2bw_deger_gir;
     reg [7:0] gray2bw_arr [0:max_row-1];
     
@@ -61,10 +40,10 @@ module gorev_6(
     wire [7:0] veri_o_erozyon;
     reg [7:0] erozyon_deger;
     
-    reg [7:0] erozyon_arr [0:max_row-1];
-    integer satir = 0;
-    integer stn = 0;
-    integer ilk_ind = 323;
+    reg [7:0] erozyon_arr [0:max_row-1]; // bunu kullanma direkt 0 l覺 olan diziye aktar 
+    reg [17:0] satir = 0;
+    reg [17:0] stn = 0;
+    reg [17:0] ilk_ind = 323;
     
     parameter max_veri = 77924;
     reg [7:0] ilk_arr [0:77923];
@@ -76,16 +55,16 @@ module gorev_6(
         end
     end
    
-    reg [7:0] son_arr [0:max_row-1];
+    
     
     reg [7:0] cikti;
-    
-    integer indis = 0;
+    reg [7:0] gray2bw_deg;
+    reg [17:0] indis = 0;
     reg veri_al = 1;   
     reg veri_gonder = 0;
     assign veri_al_o = veri_al;
     assign veri_gonder_o = veri_gonder;
-    reg [5:0] durum_oku;
+    reg [5:0] durum_oku; // boyutu azalt gereksizse 
     assign durum_oku_o = durum_oku;
     assign indis_kontrol = indis;
     
@@ -106,20 +85,18 @@ module gorev_6(
                                 if(indis < 1)begin
                                     if(gec < 4)begin 
                                         gec <= gec + 1;
-                                        mem[indis] <= veri_i;  // her cekilmede veri dataya aktar�lacak
-                                        // veri_kontrol <= veri_i;
+                                        gray2bw_deger_gir <= veri_i;  // her cekilmede veri dataya aktar覺lacak
                                     end else begin
                                         gec <= 0;
-                                        durum <= VERI_AL2;
+                                        durum <= 1;
                                     end
                                 end else begin
                                     if(gec < 2)begin 
                                         gec <= gec + 1;
-                                        mem[indis] <= veri_i;  // her cekilmede veri dataya aktar�lacak
-                                        // veri_kontrol <= veri_i;
+                                        gray2bw_deger_gir <= veri_i;  // her cekilmede veri dataya aktar覺lacak
                                     end else begin
                                         gec <= 0;
-                                        durum <= VERI_AL2;
+                                        durum <= 1;
                                     end
                                 end
                                    
@@ -128,7 +105,8 @@ module gorev_6(
                             end else begin
                                 veri_al <= 0;
                                 indis <= 0;
-                                durum <= 0;
+                                ind <= 0;
+                                durum <= 4; // 4
                             end
                         end else begin
                         end 
@@ -141,17 +119,7 @@ module gorev_6(
                     end 
                  
                  // GRAY2BW
-                    0:begin
-                        durum_oku <= durum;
-                        if(ind < max_row)begin
-                            gray2bw_deger_gir <= mem[ind];
-                            durum <= 1;
-                        end else begin
-                            ind <= 0;
-                            durum <= 4;
-                        end
-                    end  
-                                  
+                        
                     1:begin
                         durum_oku <= durum;
                         en_gray2bw <= 1;
@@ -160,7 +128,7 @@ module gorev_6(
                     end 
                     2:begin
                         durum_oku <= durum;
-                        if(gec < 10)begin
+                        if(gec < 5)begin
                             gec <= gec + 1;
                         end else begin
                             gec <= 0;
@@ -172,11 +140,11 @@ module gorev_6(
                     
                     3:begin
                         durum_oku <= durum;
-                        gray2bw_arr[ind] <= gray2bw_deger;
-                        ind <= ind + 1;
-                        durum <= 0;
+                        gray2bw_arr[indis] <= gray2bw_deger;
+                        durum <= VERI_AL2;
                     end 
                    
+                   // 0 l覺 olan diziye yaz
                     4:begin
                         durum_oku <= durum;
                         if(ilk_ind < max_veri)begin
@@ -196,14 +164,14 @@ module gorev_6(
                                 stn <= 0;
                                 ilk_ind <= 0;
                                 satir <= 0;
-                                durum <= 7;
+                                durum <= 7; 
                             end
                         end else begin
                             ind <= 0;
                             stn <= 0;
                             ilk_ind <= 0;
                             satir <= 0;
-                            durum <= 7;
+                            durum <= 7; 
                         end
                     end
                     5:begin
@@ -215,7 +183,7 @@ module gorev_6(
                     // KONVOLUSYON
                     7:begin 
                         durum_oku <= durum;
-                        if(ind < max_row)begin // 75684
+                        if(ind < max_row)begin
                             en_erozyon <= 1;
                             g0 <= ilk_arr[satir]; 
                             g1 <= ilk_arr[satir+1];
@@ -230,9 +198,10 @@ module gorev_6(
                             durum <= 8;
                         end else begin
                             ind <= 0;
+                            indis <= 0;
                             satir <= 0;
                             stn <= 0;
-                            durum <= 10;
+                            durum <= 10; 
                         end 
                     end 
                     
@@ -245,7 +214,8 @@ module gorev_6(
                             gec <= 0;
                             en_erozyon <= 0;
                             erozyon_deger <= veri_o_erozyon;
-                            durum <= 9;
+                            gray2bw_deg <= gray2bw_arr[ind];
+                            durum <= 9; //11
                         end 
                     end
                     
@@ -256,11 +226,11 @@ module gorev_6(
                             ind <= ind + 1;
                             satir <= satir + 1;
                             stn <= stn + 1;
-                            durum <= 7;
+                            durum <= 11; // 7
                         end else begin
                             satir <= satir + 2;
                             stn<=0;
-                            durum<=7;
+                            durum<=7;//11
                         end
                     end
                     
@@ -269,31 +239,29 @@ module gorev_6(
                     
                     10:begin
                         durum_oku <= durum;
-                        if(ind < max_row)begin
-                            durum <= 11;
-                        end else begin
-                            ind <= 0;
-                            islem_bitti <= 1;
-                            veri_gonder <= 1;
-                            durum <= VERI_GONDER1;
-                        end 
+                        ind <= 0;
+                        indis <= 0;
+                        islem_bitti <= 1;
+                        veri_gonder <= 1;
+                        durum <= VERI_GONDER1;
                     end 
                     
                     11:begin
                         durum_oku <= durum;
-                        if(gray2bw_arr[ind] == 8'b00000000 && erozyon_arr[ind] == 8'b11111111)begin 
+                        if(gray2bw_deg == 8'b00000000 && erozyon_deger == 8'b11111111)begin 
                             cikti <= 8'b00000000;
                             durum <= 12;
                         end else begin
-                            cikti <= gray2bw_arr[ind] - erozyon_arr[ind]; 
+                            cikti <= gray2bw_deg - erozyon_deger; 
                             durum <= 12;
-                        end 
+                        end  
                     end 
                     12:begin
                         durum_oku <= durum;
-                        son_arr[ind] <= cikti;
-                        ind <= ind + 1;
-                        durum <= 10;
+                        //erozyon_arr[ind] <= erozyon_deger;
+                        gray2bw_arr[indis] <= cikti;
+                        indis <= indis + 1;
+                        durum <= 7; 
                     end
                     
                     
@@ -304,7 +272,7 @@ module gorev_6(
                             if(ind < max_row)begin
                                 if(gec < 2)begin
                                     gec <= gec + 1;
-                                    veri_o_gorev6 <= son_arr[ind];
+                                    veri_o_gorev6 <= gray2bw_arr[ind];
                                 end else begin
                                     gec <= 0;
                                     durum <= VERI_GONDER2;
@@ -326,37 +294,7 @@ module gorev_6(
             end 
         end 
     end 
-    /*
-    integer x,y;
-    
-     initial begin 
-        #77000
-        y=$fopen("D:\\vivado\\gorev6_cikti.txt","w"); //  ?C:/Users/korze/Downloads/asil_resim_degerleri.txt
-      end
-        initial begin
-              #4000000
-              for (x = 0; x<max_row; x=x+1) 
-                  $fwrite(y,"%d\n",son_arr[x]); 
-              #4000500
-              $fclose(y);
-        end
-    
    
-    integer j,f;
-    
-     initial begin 
-        #700
-        f=$fopen("D:\\vivado\\gorev6_erozyon_0siz.txt","w"); //  ?C:/Users/korze/Downloads/asil_resim_degerleri.txt
-      end
-        initial begin
-              #2000000
-              for (j = 0; j<max_veri; j=j+1) 
-                  $fwrite(f,"%d\n",ilk_arr[j]); 
-              #1005000
-              $fclose(f);
-       end
-       
-       */
     gray2bw GRAY2BW(
         .clk_i(clk_i),
         .rst_i(rst_i),

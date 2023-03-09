@@ -1437,17 +1437,7 @@ module inverse_AC(
                     end
                     5:begin
                         sayi_r <= encoded_veri_deger << 2; // 2 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0001)begin                                                                        
-                            // 1 bit rotate shift islemi                                                            
-                            en_r1 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end                                                                                         
-                        else if(cikis_deger == 4'b0010)begin                                                      
-                            // 2 bit rotate shift islemi                                                            
-                            en_r2 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                      
-                        end else begin
-                        end
+                        durum <= 38;
                     end
                     
                     6:begin
@@ -1470,12 +1460,7 @@ module inverse_AC(
                     end
                     7:begin
                         sayi_r <= encoded_veri_deger << 3; // 3 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0011)begin                                                                        
-                            // 3 bit rotate shift islemi                                                            
-                            en_r3 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end else begin
-                        end
+                        durum <= 38;
                     end
                     
                     8:begin
@@ -1498,18 +1483,7 @@ module inverse_AC(
                     end
                     9:begin
                         sayi_r <= encoded_veri_deger << 4; // 4 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0100)begin                                                                        
-                            // 4 bit rotate shift islemi                                                            
-                            en_r4 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end 
-                        else if(cikis_deger == 4'b0001) begin
-                            // 1 bit rotate shift islemi                                                            
-                            en_r1 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else begin
-                        end
+                        durum <= 38;
                     end
                     
                     10:begin
@@ -1532,23 +1506,7 @@ module inverse_AC(
                     end
                     11:begin
                         sayi_r <= encoded_veri_deger << 5; // 5 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0101)begin                                                                        
-                            // 5 bit rotate shift islemi                                                            
-                            en_r5 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end 
-                        else if(cikis_deger == 4'b0010) begin
-                            // 2 bit rotate shift islemi                                                            
-                            en_r2 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b0001) begin
-                            // 1 bit rotate shift islemi                                                            
-                            en_r1 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else begin
-                        end
+                        durum <= 38;
                     end
                     
                     12:begin
@@ -1571,13 +1529,7 @@ module inverse_AC(
                     end
                     13:begin
                         sayi_r <= encoded_veri_deger << 6; // 6 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0001)begin                                                                        
-                            // 1 bit rotate shift islemi                                                            
-                            en_r1 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end 
-                        else begin
-                        end
+                        durum <= 38;
                     end
                     
                     14:begin
@@ -1600,22 +1552,7 @@ module inverse_AC(
                     end
                     15:begin
                         sayi_r <= encoded_veri_deger << 7; // 7 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0110)begin                                                                        
-                            // 6 bit rotate shift islemi                                                            
-                            en_r6 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end 
-                        else if(cikis_deger == 4'b0011) begin
-                            // 3 bit rotate shift islemi                                                            
-                            en_r3 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b0001) begin
-                            // 1 bit rotate shift islemi                                                            
-                            en_r1 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end else begin
-                        end
+                        durum <= 38;
                     end
                     
                     16:begin
@@ -1638,22 +1575,7 @@ module inverse_AC(
                     end
                     17:begin
                         sayi_r <= encoded_veri_deger << 8; // 8 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0111)begin                                                                        
-                            // 7 bit rotate shift islemi                                                            
-                            en_r7 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end 
-                        else if(cikis_deger == 4'b0010) begin
-                            // 2 bit rotate shift islemi                                                            
-                            en_r2 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b0001) begin
-                            // 1 bit rotate shift islemi                                                            
-                            en_r1 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end else begin
-                        end
+                        durum <= 38;
                     end
                     
                     18:begin
@@ -1676,23 +1598,7 @@ module inverse_AC(
                     end
                     19:begin
                         sayi_r <= encoded_veri_deger << 9; // 9 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0100)begin                                                                        
-                            // 4 bit rotate shift islemi                                                            
-                            en_r4 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end 
-                        else if(cikis_deger == 4'b0010) begin
-                            // 2 bit rotate shift islemi                                                            
-                            en_r2 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b0001) begin
-                            // 1 bit rotate shift islemi                                                            
-                            en_r1 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end else begin
-                        
-                        end
+                        durum <= 38;
                     end
                     
                     20:begin
@@ -1715,27 +1621,7 @@ module inverse_AC(
                     end
                     21:begin
                         sayi_r <= encoded_veri_deger << 10; // 10 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b1000)begin                                                                        
-                            // 8 bit rotate shift islemi                                                            
-                            en_r8 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end 
-                        else if(cikis_deger == 4'b0011) begin
-                            // 3 bit rotate shift islemi                                                            
-                            en_r3 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b0010) begin
-                            // 2 bit rotate shift islemi                                                            
-                            en_r2 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b0001) begin
-                            // 1 bit rotate shift islemi                                                            
-                            en_r1 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end else begin
-                        end
+                        durum <= 38;
                     end
                     
                     22:begin
@@ -1758,22 +1644,7 @@ module inverse_AC(
                     end
                     23:begin
                         sayi_r <= encoded_veri_deger << 11; // 11 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0101)begin                                                                        
-                            // 5 bit rotate shift islemi                                                            
-                            en_r5 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end 
-                        else if(cikis_deger == 4'b0010) begin
-                            // 2 bit rotate shift islemi                                                            
-                            en_r2 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b0001) begin
-                            // 1 bit rotate shift islemi                                                            
-                            en_r1 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end else begin
-                        end
+                        durum <= 38;
                     end
                     
                     24:begin
@@ -1796,22 +1667,7 @@ module inverse_AC(
                     end
                     25:begin
                         sayi_r <= encoded_veri_deger << 12; // 12 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0011)begin                                                                        
-                            // 3 bit rotate shift islemi                                                            
-                            en_r3 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma                                                                     
-                        end 
-                        else if(cikis_deger == 4'b0100) begin
-                            // 2 bit rotate shift islemi                                                            
-                            en_r4 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end
-                        else if(cikis_deger == 4'b0010) begin
-                            // 2 bit rotate shift islemi                                                            
-                            en_r2 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end else begin
-                        end
+                        durum <= 38;
                     end
                     
                     26:begin
@@ -1834,12 +1690,7 @@ module inverse_AC(
                     end
                     27:begin
                         sayi_r <= encoded_veri_deger << 15; // 15 kez kaydırlmış oldu                                                                                  
-                        if(cikis_deger == 4'b0010) begin
-                            // 2 bit rotate shift islemi                                                            
-                            en_r2 = 1;                                                                              
-                            durum = 2; // asil sayi icin kaydirma     
-                        end else begin
-                        end
+                        durum <= 38;
                     end
                     
                     28:begin
@@ -1862,6 +1713,11 @@ module inverse_AC(
                     end
                     29:begin
                         sayi_r <= encoded_veri_deger << 16; // 16 kez kaydırlmış oldu                                                                                  
+                        durum <= 38;
+                    end
+                    
+                    // ASIL SAYI ICIN GENEL KAYDIRMA
+                    38:begin
                         if(cikis_deger == 4'b0001) begin
                             // 1 bit rotate shift islemi                                                            
                             en_r1 = 1;                                                                              
@@ -1913,7 +1769,7 @@ module inverse_AC(
                             durum = 2; // asil sayi icin kaydirma     
                         end else begin
                         end
-                    end
+                    end 
                     
                     30:begin
                     
@@ -2192,7 +2048,7 @@ module inverse_AC(
                     32:begin
                         // 2 ye tümleme yapılacak // 00000101 / j = 0;
                         i = 0; 
-                        if(ram_deger1[j] !== 1)begin 
+                        if(ram_deger1[j] == 0)begin 
                             j = j + 1; // ilk 1e ulaşana kadar 
                         end else begin
                             j = j + 1;
@@ -2219,12 +2075,13 @@ module inverse_AC(
                     end
                         
                     34:begin
-                        if(eob_kontrol !== 1) begin
-                            ram_deger_asil = ram_deger1;
-                            durum = 35;
-                        end else begin
+                        if(eob_kontrol == 1) begin
                             // EOB ye ulasildi
                             kaydirma1 = kaydirma1 + 4;
+                            durum = 35;
+                        end else begin
+                            
+                            ram_deger_asil = ram_deger1;
                             durum = 35;
                         end
                     end

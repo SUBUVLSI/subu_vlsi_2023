@@ -225,11 +225,11 @@ module fp_toplama#(parameter b=32, e=8, m=23)(
                     // normal sayı
                     12:begin  //sonuc aktarılır.
                        if(g1_i== 0 || g2_i == 0)begin
-                            if(g1_i == 0 && g2_i !== 0)begin
+                            if(g1_i == 0 && g2_i != 0)begin
                                 sonuc = g2_i;
                                 durum = 13;
                             end 
-                            else if(g1_i !== 0 && g2_i == 0)begin
+                            else if(g1_i != 0 && g2_i == 0)begin
                                 sonuc = g1_i;
                                 durum = 13;
                             end else begin

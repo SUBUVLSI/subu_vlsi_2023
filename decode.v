@@ -61,7 +61,7 @@ module decode(
     
     // ENCODED VERI ICIN RAM
     integer encoded_satir = 0;
-    reg [9:0] addr_encoded_veri; // ramin satır sayısı bilinmiyor 
+    reg [9:0] addr_encoded_veri; // ramin satÄ±r sayÄ±sÄ± bilinmiyor 
     reg we_encoded , en_encoded;
     reg [31:0] in_encoded;
     wire [31:0] out_encoded;
@@ -69,20 +69,20 @@ module decode(
     // VERI CEKME ICIN DEGISKENLER
     reg [31:0] buffer, data, ara_deger;
     reg [63:0] encoded_resim;
-    integer cnt = 0; // ne kadar veri kullandık
+    integer cnt = 0; // ne kadar veri kullandÄ±k
     integer say = 0; // 32 bit bitti mi? 
     integer say_kontrol = 32;
     integer sag_sol_kaydir = 0;
-    integer eob_arttir = 0; // 1200 tane olunca bütün işlemler bitecek 
+    integer eob_arttir = 0; // 1200 tane olunca bÃ¼tÃ¼n iÅŸlemler bitecek 
     reg [31:0] encoded_resim_deger; // isleme sokulan
     
-    // inverse huffman çıktılarını saklamak için
-    reg [10:0] RAM_inv_zigzag [63:0]; // 11 bitlik 64 satırlık ram //BU INVERSE KUANTALAMAYA GIDECEK
+    // inverse huffman Ã§Ä±ktÄ±larÄ±nÄ± saklamak iÃ§in
+    reg [10:0] RAM_inv_zigzag [63:0]; // 11 bitlik 64 satÄ±rlÄ±k ram //BU INVERSE KUANTALAMAYA GIDECEK
     integer ind = 0;
-    reg [10:0] RAM_dc_ac [63:0]; // 11 bitlik 64 satırlık ram
+    reg [10:0] RAM_dc_ac [63:0]; // 11 bitlik 64 satÄ±rlÄ±k ram
     
     integer ram_satir = 0;
-    integer ram_satir_ekle = 0; // ac asil sayidan önce gelecek 0 sayisi kontrolü / ram_satir üzerine eklenecek
+    integer ram_satir_ekle = 0; // ac asil sayidan Ã¶nce gelecek 0 sayisi kontrolÃ¼ / ram_satir Ã¼zerine eklenecek
     
     // DC ICIN
     // DC
@@ -112,13 +112,13 @@ module decode(
     assign ac_deger = asil_deger_ac;                                                                    
     wire [4:0] sagdaki_sifir_sayisi_ac; // max 20 olabilir                                              
     wire [4:0] ondeki_sifir_sayisi_ac; // asil sayi onundeki 0 sayisi / ramde asil sayi onune yazilacak 
-    wire eob_kontrol_ac; // bu 1 olursa ilk matris bitmiş olur                                           
+    wire eob_kontrol_ac; // bu 1 olursa ilk matris bitmiÅŸ olur                                           
     assign ondeki_sifir_say = sagdaki_sifir_sayisi_ac;
     reg [31:0] encoded_veri_o_ac_ata;                                                                                           
     reg [10:0] asil_deger_ac_ata;                                                                          
     reg [4:0] sagdaki_sifir_sayisi_ac_ata; // max 20 olabilir                                              
     reg [4:0] ondeki_sifir_sayisi_ac_ata; // asil sayi onundeki 0 sayisi / ramde asil sayi onune yazilacak 
-    reg eob_kontrol_ac_ata; // bu 1 olursa ilk matris bitmiş olur 
+    reg eob_kontrol_ac_ata; // bu 1 olursa ilk matris bitmiÅŸ olur 
     
     
     // INVERSE KUANTALAMA + DCT 
@@ -136,7 +136,7 @@ module decode(
     reg rd_rom_k;
     reg [5:0] addr_rom_k;
     wire signed [10:0] data_out_rom_k;
-    integer satir_k = 0; // kuantalam romu satırlarını gezmek icin
+    integer satir_k = 0; // kuantalam romu satÄ±rlarÄ±nÄ± gezmek icin
     
     reg signed [31:0] kuantalama_sonucu_ram[0:63]; // kuantalam_sonucu 32 bitlik ram
     reg signed [31:0] kuantalama_sonucu_ram_oku;
@@ -160,26 +160,26 @@ module decode(
     integer satir_fp = 0;
     reg [31:0] int_fp_deger;
     
-    // floatin point carpma / int_fp_donus ile cos ayrık degerleri ile fp carpım
+    // floatin point carpma / int_fp_donus ile cos ayrÄ±k degerleri ile fp carpÄ±m
     reg en_carp;
     reg [31:0] fp_carp_gir1, fp_carp_gir2;
     wire [31:0] fp_carp_cik;
     reg [31:0] fp_carp_ata;
     
-    // cos ayrık deger rom 
+    // cos ayrÄ±k deger rom 
     reg rd_rom_cos;
     reg [11:0] addr_rom_cos;
     wire signed [31:0] data_out_rom_cos;
-    integer satir_cos = 0; // cos romu satırlarını gezmek icin
+    integer satir_cos = 0; // cos romu satÄ±rlarÄ±nÄ± gezmek icin
     integer cos_rom_say = 0; // 4096 olur max
     
     // T matris deger rom 
     reg rd_rom_t;
     reg [5:0] addr_rom_t;
     wire signed [31:0] data_out_rom_t;
-    integer satir_t = 0; // T matris romu satırlarını gezmek icin
+    integer satir_t = 0; // T matris romu satÄ±rlarÄ±nÄ± gezmek icin
     
-    // fp carpım sonuc1 icin
+    // fp carpÄ±m sonuc1 icin
     reg we_ram_sonuc1, en_ram_sonuc1;
     reg [5:0] addr_ram_sonuc1;
     reg [31:0] data_in_ram_sonuc1;
@@ -187,8 +187,8 @@ module decode(
     integer satir_sonuc1 = 0;
     
     // fp toplam icin
-    reg [31:0] toplam1_sonucu_ram[0:63]; // ram_toplam sonucu / 128 eklemeden önce 
-    reg [31:0] toplam2_sonucu_ram[0:63]; // 128 eklenmiş
+    reg [31:0] toplam1_sonucu_ram[0:63]; // ram_toplam sonucu / 128 eklemeden Ã¶nce 
+    reg [31:0] toplam2_sonucu_ram[0:63]; // 128 eklenmiÅŸ
     integer satir_sonuc2 = 0;
     
     // floatin point toplama 
@@ -197,7 +197,7 @@ module decode(
     wire [31:0] fp_topla_cik;
     reg [31:0] fp_topla_ata;
     
-    reg [31:0] ram_toplam = 0; // ram satırlarını toplama
+    reg [31:0] ram_toplam = 0; // ram satÄ±rlarÄ±nÄ± toplama
    
     // fp -> integer a donusum icin
     reg en_fp_int;
@@ -322,11 +322,11 @@ module decode(
                                     indis_say <= indis_say + 1;
                                 end
                             end else begin
-                                if(gec < 4)begin // ikinci veri için gec < 4 yap // bundan sonrakiler içi gec < 3 yap /AYR
+                                if(gec < 4)begin // ikinci veri iÃ§in gec < 4 yap // bundan sonrakiler iÃ§i gec < 3 yap /AYR
                                     gec <= gec + 1;
                                 end else begin
                                     gec <= 0;
-                                    data <= encoded_i;  // her cekilmede veri dataya aktarılacak
+                                    data <= encoded_i;  // her cekilmede veri dataya aktarÄ±lacak
                                     indis_say <= indis_say + 1;
                                     data_gonderme_ok <= 0;
                                     durum <= sonraki_durum;
@@ -344,11 +344,11 @@ module decode(
                     DIGER_VERILERI_CEK:begin // 63
                         decode_durum <= durum;
                         if(data_gonderme_ok == 1)begin                            
-                            if(gec < 3)begin // ikinci veri için gec < 4 yap // bundan sonrakiler içi gec < 3 yap /AYR
+                            if(gec < 3)begin // ikinci veri iÃ§in gec < 4 yap // bundan sonrakiler iÃ§i gec < 3 yap /AYR
                                 gec <= gec + 1;
                             end else begin
                                 gec <= 0;
-                                data <= encoded_i;  // her cekilmede veri dataya aktarılacak
+                                data <= encoded_i;  // her cekilmede veri dataya aktarÄ±lacak
                                 indis_say <= indis_say + 1;
                                 data_gonderme_ok <= 0;
                                 durum <= sonraki_durum;
@@ -375,7 +375,7 @@ module decode(
                         // DC yazma 
                         encoded_veri_i_dc <= encoded_resim_deger;
                         en_dc <= 1;
-                        durum <= INV_HUFFMAN_RUNLENGTH4; // DC deger kontrolü
+                        durum <= INV_HUFFMAN_RUNLENGTH4; // DC deger kontrolÃ¼
                     end
                     
                     INV_HUFFMAN_RUNLENGTH4:begin // 4
@@ -405,7 +405,7 @@ module decode(
                     begin
                         decode_durum <= durum;
                         // array e yaz // RAM_dc_ac => bir array
-                        RAM_dc_ac[0] <= asil_deger_dc_al ; // bir sonraki dc değeri bir öncekiyle toplamı şeklinde olacak
+                        RAM_dc_ac[0] <= asil_deger_dc_al ; // bir sonraki dc deÄŸeri bir Ã¶ncekiyle toplamÄ± ÅŸeklinde olacak
                         ram_satir <= ram_satir + 1; // ilk satir doldu 
                         say <= say + cnt;
                         encoded_resim <= encoded_resim << cnt;
@@ -428,7 +428,7 @@ module decode(
                     INV_HUFFMAN_RUNLENGTH7:begin // 8
                         decode_durum <= durum;
                         say <= say - 32;
-                        buffer <= buffer >> sag_sol_kaydir; // tekrar sola kaydırılır 
+                        buffer <= buffer >> sag_sol_kaydir; // tekrar sola kaydÄ±rÄ±lÄ±r 
                         data_gonderme_ok <= 0;
                         durum <= INV_HUFFMAN_RUNLENGTH8;
                         
@@ -442,7 +442,7 @@ module decode(
                   
                     INV_HUFFMAN_RUNLENGTH9:begin // 53
                         decode_durum <= durum;
-                        encoded_resim <= encoded_resim << sag_sol_kaydir; // tekrar sola kaydırılır 
+                        encoded_resim <= encoded_resim << sag_sol_kaydir; // tekrar sola kaydÄ±rÄ±lÄ±r 
                         durum <= INV_HUFFMAN_RUNLENGTH10; // AC kontrole 
                     end
                     
@@ -478,12 +478,12 @@ module decode(
                     
                     INV_HUFFMAN_RUNLENGTH13:begin // 11
                         decode_durum <= durum;
-                        if(eob_kontrol_ac_ata !== 1)begin
-                            durum <= INV_HUFFMAN_RUNLENGTH14;
+                        if(eob_kontrol_ac_ata == 1)begin //////BURAYA !==
+                            eob_arttir <= eob_arttir + 1; // 1200 olunca tÃ¼m iÅŸlemler biter
+                            ram_satir <= ram_satir + ram_satir_ekle; // ondeki_sifir_sayisi_ac_ata+1 kadar  satir doldu  // daha sonra kalan satÄ±rlarÄ± 0 la doldur 
+                            durum <= 15;
                         end else begin
-                            eob_arttir <= eob_arttir + 1; // 1200 olunca tüm işlemler biter
-                            ram_satir <= ram_satir + ram_satir_ekle; // ondeki_sifir_sayisi_ac_ata+1 kadar  satir doldu  // daha sonra kalan satırları 0 la doldur 
-                            durum <= INV_HUFFMAN_RUNLENGTH19;
+                            durum <= 60;
                         end
                     end
                     
@@ -491,7 +491,7 @@ module decode(
                          decode_durum <= durum;
                         if(ondeki_sifir_sayisi_ac_ata == 16)begin // ram_satir = 3 / ram_satir = 18
                             if(ram_satir_ekle < ondeki_sifir_sayisi_ac_ata) begin
-                                RAM_dc_ac[ram_satir + ram_satir_ekle] <= 11'b00000000000; // ilgili satıra 0 yazılır
+                                RAM_dc_ac[ram_satir + ram_satir_ekle] <= 11'b00000000000; // ilgili satÄ±ra 0 yazÄ±lÄ±r
                                 ram_satir_ekle <= ram_satir_ekle + 1;
                             end else begin
                                 cnt <= sagdaki_sifir_sayisi_ac_ata;
@@ -501,7 +501,7 @@ module decode(
                             // devam
                             // ram e yaz  // ondeki_sifir_sayisi_ac_ata = 3  
                             if(ram_satir_ekle < ondeki_sifir_sayisi_ac_ata) begin
-                                RAM_dc_ac[ram_satir+ram_satir_ekle] <= 11'b00000000000; // ilgili satıra 0 yazılır
+                                RAM_dc_ac[ram_satir+ram_satir_ekle] <= 11'b00000000000; // ilgili satÄ±ra 0 yazÄ±lÄ±r
                                 ram_satir_ekle <= ram_satir_ekle + 1;
                             end else begin
                                 RAM_dc_ac[ram_satir+ram_satir_ekle] <= asil_deger_ac_ata;
@@ -535,11 +535,11 @@ module decode(
                        
                     end
                     
-                    // HER CLOCKTA KAYDIRIR , KAYDIRMA DEGERİ KADAR / KONTROL ET DİĞER KISIMLARDA 
+                    // HER CLOCKTA KAYDIRIR , KAYDIRMA DEGERÄ° KADAR / KONTROL ET DÄ°ÄER KISIMLARDA 
                     INV_HUFFMAN_RUNLENGTH16:begin // 14
                         decode_durum <= durum;
                         say <= say - 32;
-                        buffer <= buffer >> sag_sol_kaydir; // saga kaydırılır 
+                        buffer <= buffer >> sag_sol_kaydir; // saga kaydÄ±rÄ±lÄ±r 
                         data_gonderme_ok <= 0;
                         durum <= INV_HUFFMAN_RUNLENGTH17;
                     end
@@ -551,7 +551,7 @@ module decode(
                     end 
                     INV_HUFFMAN_RUNLENGTH18:begin   // 56
                         decode_durum <= durum;
-                        encoded_resim <= encoded_resim << sag_sol_kaydir; // tekrar sola kaydırılır 
+                        encoded_resim <= encoded_resim << sag_sol_kaydir; // tekrar sola kaydÄ±rÄ±lÄ±r 
                         durum <= INV_HUFFMAN_RUNLENGTH10; // AC kontrole 
                     end 
                     
@@ -559,17 +559,17 @@ module decode(
                         decode_durum <= durum;
                         eob_kontrol_ac_ata <= 0;
                         if(eob_arttir <= 1200)begin
-                            // kalan satırlar sıfırlanır 
+                            // kalan satÄ±rlar sÄ±fÄ±rlanÄ±r 
                             if(ram_satir < 64)begin
                                 RAM_dc_ac[ram_satir] <= 11'b00000000000;
                                 ram_satir <= ram_satir + 1;
                             end else begin
                                 ram_satir <= 0;
-                                cnt <= sagdaki_sifir_sayisi_ac_ata; // 4 tane daha kaymış olcak eob için 
+                                cnt <= sagdaki_sifir_sayisi_ac_ata; // 4 tane daha kaymÄ±ÅŸ olcak eob iÃ§in 
                                 durum <= INV_ZIGZAG;
                             end
                         end else begin
-                            // bütün islemler biter
+                            // bÃ¼tÃ¼n islemler biter
                         end
                     end
                     
@@ -642,9 +642,9 @@ module decode(
                         RAM_inv_zigzag[62]  <= RAM_dc_ac[62] ;
                         RAM_inv_zigzag[63]  <= RAM_dc_ac[63] ;
                             
-                        encoded_resim <= encoded_resim << cnt; // 4 tane daha kaymış olcak eob için
+                        encoded_resim <= encoded_resim << cnt; // 4 tane daha kaymÄ±ÅŸ olcak eob iÃ§in
                         say <= say + cnt;
-                        // bu RAM_inv_zigzag arrayi dct işlemine sokulacak
+                        // bu RAM_inv_zigzag arrayi dct iÅŸlemine sokulacak
                         we_ram1 <= 1;
                         en_ram1 <= 1;
                         durum <= INV_KUANTALAMA1;
@@ -661,7 +661,7 @@ module decode(
                             cnt <= 0; 
                             ind <= 0;
                             en_ram1 <= 1;
-                            we_ram1 <= 0; // okuma yapıcak
+                            we_ram1 <= 0; // okuma yapÄ±cak
                             rd_rom_k <= 1;
                             durum <= INV_KUANTALAMA3;  
                         end
@@ -669,7 +669,7 @@ module decode(
                     
                     INV_KUANTALAMA2:begin // 18
                         decode_durum <= durum;
-                        data_in_ram1 <= RAM_inv_zigzag[ind]; //yazacağı veri zaten 11 bit direkt tek satıra aktanır
+                        data_in_ram1 <= RAM_inv_zigzag[ind]; //yazacaÄŸÄ± veri zaten 11 bit direkt tek satÄ±ra aktanÄ±r
                         ind <= ind+1;  // bir sonraki clockta artacak
                         durum <= INV_KUANTALAMA1;
                     end 
@@ -735,7 +735,7 @@ module decode(
                     
                     INV_DCT2:begin   // 24
                         decode_durum <= durum;
-                        if(gec < 45) begin // 42 saykıl
+                        if(gec < 45) begin // 42 saykÄ±l
                             gec = gec + 1;
                         end else begin
                             int_fp_deger <= int_fp_out;
@@ -755,7 +755,7 @@ module decode(
                     end 
                     
                     // FP CARPMA / COS ROM
-                    // floatin point carpma / int_fp_donus ile cos ayrık degerleri ile fp carpım
+                    // floatin point carpma / int_fp_donus ile cos ayrÄ±k degerleri ile fp carpÄ±m
                     
                     INV_DCT4:begin // 26
                         decode_durum <= durum;
@@ -774,7 +774,7 @@ module decode(
                                 en_ram_sonuc1 <= 1;
                                 we_ram_sonuc1 <= 0; // okuma
                                 en_carp <= 0;
-                                durum <= INV_DCT10; // sonuc1 ram satırları toplanır
+                                durum <= INV_DCT10; // sonuc1 ram satÄ±rlarÄ± toplanÄ±r
                             end
                         end else begin
                             satir_sonuc2 <= 0;
@@ -856,7 +856,7 @@ module decode(
                         end else begin
                             satir_sonuc1 <= 0;
                             en_topla <= 0;
-                            // ram_toplam degeri bir ram e yazılacak
+                            // ram_toplam degeri bir ram e yazÄ±lacak
                             durum <= INV_DCT14;
                         end
                     end
@@ -888,14 +888,14 @@ module decode(
                      
                     INV_DCT13:begin // 35
                         decode_durum <= durum;
-                        ram_toplam <= fp_topla_ata; // bu calışmazsa başka değişken kullan ram degerlerini toplamak için
+                        ram_toplam <= fp_topla_ata; // bu calÄ±ÅŸmazsa baÅŸka deÄŸiÅŸken kullan ram degerlerini toplamak iÃ§in
                         satir_sonuc1 <= satir_sonuc1 + 1;
                         durum <= INV_DCT10;
                     end 
                     
                     INV_DCT14:begin // 36
                         decode_durum <= durum;
-                    // ram_toplam sonuc2 ramine yazılacak
+                    // ram_toplam sonuc2 ramine yazÄ±lacak
                         if(satir_sonuc2 < 64)begin
                             toplam1_sonucu_ram[satir_sonuc2] <= ram_toplam;
                             satir_sonuc2 <= satir_sonuc2 + 1;
@@ -956,7 +956,7 @@ module decode(
                             en_fp_int <= 0;
                             sonuc_satir <= 0;
                             en_ram_sonuc <= 1;         
-                            we_ram_sonuc <= 0; // okuma // modül pasif
+                            we_ram_sonuc <= 0; // okuma // modÃ¼l pasif
                             addr_ram_sonuc <= 0;
                             durum <= VERI_GONDER1; // 45 OKUMA
                         end
@@ -998,7 +998,7 @@ module decode(
                             en_ram_sonuc <= 1;
                             we_ram_sonuc <= 0; // okuma
                             addr_ram_sonuc <= sonuc_satir; 
-                            // sonuc_ram[sonuc_satir] <= 8'bxxxxxxxx; // sıfırlamak icin verileri 
+                            // sonuc_ram[sonuc_satir] <= 8'bxxxxxxxx; // sÄ±fÄ±rlamak icin verileri 
                             durum <= VERI_GONDER2;
                         end else begin
                             sonuc_satir <= 0;
@@ -1034,7 +1034,7 @@ module decode(
                     INV_HUFFMAN_RUNLENGTH20:begin // 47
                         decode_durum <= durum;
                         say <= say - 32;
-                        buffer <= buffer >> sag_sol_kaydir; // tekrar sola kaydırılır 
+                        buffer <= buffer >> sag_sol_kaydir; // tekrar sola kaydÄ±rÄ±lÄ±r 
                         data_gonderme_ok <= 0;
                         durum <= INV_HUFFMAN_RUNLENGTH21;
                     end
@@ -1047,7 +1047,7 @@ module decode(
                     
                     INV_HUFFMAN_RUNLENGTH22:begin // 49
                         decode_durum <= durum;
-                        encoded_resim <= encoded_resim << sag_sol_kaydir; // tekrar sola kaydırılır 
+                        encoded_resim <= encoded_resim << sag_sol_kaydir; // tekrar sola kaydÄ±rÄ±lÄ±r 
                         durum <= INV_HUFFMAN_RUNLENGTH2; // DC kontrole 
                     end 
                     
@@ -1089,7 +1089,7 @@ module decode(
     
     
     // INVERSE KUANTALAMA + DCT 
-        // 11 bitlik ram / 8x8= 64 satır
+        // 11 bitlik ram / 8x8= 64 satÄ±r
     ram#(.V(11),.S(64),.A(6)) ram1(
         .clk_i(clk_i),
         .en_i(en_ram1),
@@ -1116,7 +1116,7 @@ module decode(
         .c_o(int_fp_out)
     );
     
-    // 32 bitlik floating point ram / 8x8= 64 satır
+    // 32 bitlik floating point ram / 8x8= 64 satÄ±r
     ram#(.V(32),.S(64),.A(6)) ramfp(
         .clk_i(clk_i),
         .en_i(en_ram_fp),
@@ -1126,7 +1126,7 @@ module decode(
         .data_o(data_out_ram_fp)
     );
     
-    // floating point çarpma 
+    // floating point Ã§arpma 
     fp_carpma fp_carp(
         .clk_i(clk_i),
         .rst_i(rst_i),
@@ -1137,7 +1137,7 @@ module decode(
         );
     
     
-    // cos ayrık degerler icin rom
+    // cos ayrÄ±k degerler icin rom
     cos_rom cos_deger_rom(
         .clk_i(clk_i),
         .rst_i(rst_i),
@@ -1146,7 +1146,7 @@ module decode(
         .data_o(data_out_rom_cos)
     );
     
-    // fp carpım sonucu1 icin // veri * cos matrisi * t matrisi
+    // fp carpÄ±m sonucu1 icin // veri * cos matrisi * t matrisi
     ram#(.V(32),.S(64),.A(6)) ramfp_sonuc1(
         .clk_i(clk_i),
         .en_i(en_ram_sonuc1),
@@ -1189,7 +1189,7 @@ module decode(
         .c_o(fp_int_out)
     );
     
-    // 8 bitlik ram / 8x8= 64 satır
+    // 8 bitlik ram / 8x8= 64 satÄ±r
     ram#(.V(8),.S(64),.A(6)) ram_sonuc(
         .clk_i(clk_i),
         .en_i(en_ram_sonuc),

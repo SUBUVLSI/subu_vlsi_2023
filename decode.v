@@ -940,9 +940,20 @@ module decode(
                     
                     INV_DCT17:begin // 39
                         decode_durum <= durum;
-                        toplam2_sonucu_ram[satir_sonuc2] <= fp_topla_ata;
-                        satir_sonuc2 <= satir_sonuc2 + 1;
-                        durum <= INV_DCT15;
+                        if(fp_topla_ata > 32'b01000011011111110000000000000000)begin
+                             toplam2_sonucu_ram[satir_sonuc2] <= 32'b01000011011111110000000000000000;
+                             satir_sonuc2 <= satir_sonuc2 + 1;
+                             durum <= INV_DCT15;
+                        end 
+                        else if(fp_topla_ata < 32'b0000000000000000000000000000000) begin
+                            toplam2_sonucu_ram[satir_sonuc2] <= 32'b0000000000000000000000000000000;
+                            satir_sonuc2 <= satir_sonuc2 + 1;
+                            durum <= INV_DCT15;
+                        end else begin
+                            toplam2_sonucu_ram[satir_sonuc2] <= fp_topla_ata;
+                            satir_sonuc2 <= satir_sonuc2 + 1;
+                            durum <= INV_DCT15;
+                        end
                     end 
                     
                     INV_DCT18:begin // 40

@@ -1,5 +1,5 @@
 `timescale 100ns / 1ps
-module histogram(
+module histogram_table(
     input clk_i, rst_i, en_i
     );
 
@@ -16,7 +16,7 @@ reg [7:0] mem [0:max_row-1];
 reg [8:0] k = 0, m = 0;
 
     initial begin
-        $readmemb("D:\\vivado\\asil_resim.txt",mem);  
+        $readmemb("D:\\vivado\\asil_resim.txt",mem);  // txtden çekilen resim piksel değerleri
     end 
 
     always @(posedge clk_i) begin
@@ -79,7 +79,7 @@ reg [8:0] k = 0, m = 0;
     
      initial begin 
         #150000
-        f=$fopen("D:\\vivado\\histogram_table.txt","w"); 
+         f=$fopen("D:\\vivado\\histogram_table.txt","w");  // txt ye yazılan histogram tablosu değerleri
       end
         initial begin
               #200000

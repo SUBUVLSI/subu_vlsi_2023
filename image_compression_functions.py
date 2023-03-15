@@ -1,4 +1,4 @@
-# MODULES FOR IMAGE COMPRESSION (JPEG STANDART)
+# FUNCTIONS FOR IMAGE COMPRESSION
 
 #Import Libraries
 import math
@@ -29,10 +29,9 @@ def dct(matrix):
                         dct1=matrix[k][l] * math.cos((2 * k + 1) * i * math.pi / (2 * m))* math.cos((2 * l + 1) * j * math.pi / (2 * n))
                         sum = sum + dct1
                         dct[i][j] = T[i][j] * sum
-                        
     return  dct
 
-
+#Quantazation
 def quantazation(matrix):
     matrix=np.array(matrix)    
     if not matrix.shape[0] == matrix.shape[1]:
@@ -55,6 +54,7 @@ def quantazation(matrix):
                 matrix[i][j]=int(matrix[i][j])
     return matrix        
 
+#Zigzag Scan
 def zigzag(matrix: np.ndarray) -> np.ndarray:
     h = 0
     v = 0
@@ -66,25 +66,25 @@ def zigzag(matrix: np.ndarray) -> np.ndarray:
     output = np.zeros((v_max * h_max))
 
     while (v < v_max) and (h < h_max):
-        if ((h + v) % 2) == 0:  # going up
+        if ((h + v) % 2) == 0: 
             if v == v_min:
-                output[i] = matrix[v, h]  # first line
+                output[i] = matrix[v, h]  
                 if h == h_max:
                     v = v + 1
                 else:
                     h = h + 1
                 i = i + 1
-            elif (h == h_max - 1) and (v < v_max):  # last column
+            elif (h == h_max - 1) and (v < v_max): 
                 output[i] = matrix[v, h]
                 v = v + 1
                 i = i + 1
-            elif (v > v_min) and (h < h_max - 1):  # all other cases
+            elif (v > v_min) and (h < h_max - 1):  
                 output[i] = matrix[v, h]
                 v = v - 1
                 h = h + 1
                 i = i + 1
         else:  # going down
-            if (v == v_max - 1) and (h <= h_max - 1):  # last line
+            if (v == v_max - 1) and (h <= h_max - 1):  
                 output[i] = matrix[v, h]
                 h = h + 1
                 i = i + 1
@@ -95,16 +95,17 @@ def zigzag(matrix: np.ndarray) -> np.ndarray:
                 else:
                     v = v + 1
                 i = i + 1
-            elif (v < v_max - 1) and (h > h_min):  # all other cases
+            elif (v < v_max - 1) and (h > h_min):
                 output[i] = matrix[v, h]
                 v = v + 1
                 h = h - 1
                 i = i + 1
-        if (v == v_max - 1) and (h == h_max - 1):  # bottom right element
+        if (v == v_max - 1) and (h == h_max - 1): 
             output[i] = matrix[v, h]
             break 
     return output
-    
+ 
+#DC component size 
 def size(number):
     if (number==0):
         return 0
@@ -134,7 +135,7 @@ def size(number):
         return 11
     
     
-            
+#DC component size binary code           
 def dc_size_code (dc_size):
     if (dc_size == 0):
         return '00'
@@ -160,7 +161,8 @@ def dc_size_code (dc_size):
         return '11111110'
     elif (dc_size==11):
         return '111111110'  
-    
+
+#Ones compliment for actual numbers
 def ones_compliment(a):
     if (a==0):
         return ''
@@ -173,7 +175,8 @@ def ones_compliment(a):
         return filp_bits
     elif (a>0):
         return bin(a)[2:]
-    
+
+#Number of zeros and AC actual value size binary code
 def ac_zero_size_code (zero_count,ac_value):
     if zero_count == 0 :
         if ac_value == 1 :
@@ -562,6 +565,7 @@ def ac_zero_size_code (zero_count,ac_value):
     elif zero_count == 16 :
         return 3547235
 
+#Run-length
 def run_length(zigzag_tarama):
     run_length=[]
     count=0
@@ -604,8 +608,3 @@ def run_length(zigzag_tarama):
             count=0
             i= 64
     return run_length            
-    
-       
-    
-
-

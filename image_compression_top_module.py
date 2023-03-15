@@ -8,20 +8,10 @@ from image_compression_functions import *
 image=cv2.imread('C:/Users/PC/Desktop/t/image_compression/football_Qvga.tif')
 image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
+#define height and width
 genislik=image.shape[1]
 yukseklik=image.shape[0] 
-
-"""
-#resim piksellerinin kaybolmaması için
-image_pixels=[]
-for i in range(yukseklik):
-    for j in range(genislik):
-        image_pixels.append(str(image[i][j]))
-with open("C:/Users/PC/Desktop/python_kiz_kulesi_pixels.txt", "w") as f:
-    for pixel in image_pixels:
-        f.write(pixel + "\n")
-"""        
-
+     
 zigzag_sonucu=[]
 for a in range (0,yukseklik,8):
     for b in range (0,genislik,8):
@@ -36,11 +26,12 @@ for a in range (0,yukseklik,8):
         #zigzag
         zigzag_tarama=zigzag(kuantalama)   
         zigzag_sonucu.append(zigzag_tarama)
-        
+
+#Dpcm
 dpcm=copy.deepcopy(zigzag_sonucu)        
 for i in range (1199):
     dpcm[i+1][0]=zigzag_sonucu[i+1][0]-zigzag_sonucu[i][0]
-        
+#Run-length       
 run_length_islemi=[]    
 for i in range (1200):
     a=dpcm[i]
@@ -69,11 +60,11 @@ for i in range(1200):
             elif (run_length_islemi[i][j] == [16]) :
                 huffman[i][j] = ['11111111001']
             else:
-                print("hata")
+                print("hata1")
         else:
-            print("hata1")
-
+            print("hata2")
             
+#final bitstream           
 bitstream=[] 
 for i in range(1200):
     a=len(huffman[i])
@@ -81,16 +72,16 @@ for i in range(1200):
         b=len(huffman[i][j])
         for k in range(b):
             if (huffman[i][j][k] != str(huffman[i][j][k])):
-                print("hata varrr")
+                print("hata3")
             bitstream.append(huffman[i][j][k])
-"""
-#tek bir satıra bitstream'i yazdırmak için 
+
+#to write bitstream on a single line
 while('' in bitstream):
     bitstream.remove('')
 s = ''.join(bitstream)
 
 
-#dosyaları oluşturmak için
+#for creating files
 uzunluk = len(s)
 true = True
 while true :
@@ -100,34 +91,25 @@ while true :
         s = s + '0'
         uzunluk = uzunluk +1 
  
-#txt dosyası oluşurmak için        
-with open("C:/Users/PC/Desktop/python_kiz_kulesi_bitstream.txt", "w") as f:
+#for txt files     
+with open("C:/Users/PC/Desktop/python_image_bitstream.txt", "w") as f:
     f.write(s)     
 
-#havva için
+#for simulation tests
 byte_otuziki=[]
 j=0
 while j < len(s):
     byte_otuziki.append(s[j:j+32])
     j += 32
-with open("C:/Users/PC/Desktop/python_kiz_kulesi_bitstream_havva.txt", "w") as f:
+with open("C:/Users/PC/Desktop/python_image_bitstream_simulation.txt", "w") as f:
     for byte in byte_otuziki:
         f.write(byte + "\n")
 
-#bin dosyası oluşturmak için              
+#for bin files             
 i = 0
 buffer = bytearray()
 while i < len(s):
     buffer.append( int(s[i:i+8] , 2) )
     i += 8
-with open('C:/Users/PC/Desktop/python_kiz_kulesi_bitsream.bin', 'bw') as f:
+with open('C:/Users/PC/Desktop/python_image_bitsream.bin', 'bw') as f:
     f.write(buffer)    
-"""
-       
-            
-       
-        
-        
-        
-            
-            

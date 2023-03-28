@@ -155,7 +155,6 @@ module decode_tb(
                         end
                     end 
                     
-                    // 4. VERIYI CEKEMIYOR / DATA DEGISMIYOR // DURUM 4 E GITMIYOR
                     5:begin
                         // decode alt modülünden yeni veri icin sinyal bekleniyor
                         if(data_gonderme_ok == 1)begin 

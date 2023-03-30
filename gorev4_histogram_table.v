@@ -39,7 +39,7 @@ reg [7:0] data_indeks [0:255] ;
 reg [7:0] a;
 reg bitti=0;
 parameter max_row = 76800;
-reg [7:0] mem [0:max_row-1];
+//reg [7:0] mem [0:max_row-1];
 
 
 reg veri_al = 1;   
@@ -56,7 +56,23 @@ assign islem_bitti_o = islem_bitti;
 
 reg [18:0] indis = 0, gec = 0, ind = 0;
 
+reg [7:0] veri;
+
 reg [8:0] k = 0, m = 0;
+
+initial begin
+    for(i = 0; i<256; i=i+1) begin
+        histogram_out[i] <= 0;
+    end
+    
+//    if(i<256) begin
+//       histogram_out[i] <= 0;
+//       i<=i+1;
+//    end else begin
+//      i<=0;
+//      durum<=1; 
+//    end
+end 
 
     always @(posedge clk_i) begin
         if(rst_i)begin
@@ -72,27 +88,27 @@ reg [8:0] k = 0, m = 0;
                                 if(indis < 1)begin
                                     if(gec < 4)begin 
                                         gec <= gec + 1;
-                                        mem[indis] <= veri_i;  // her cekilmede veri dataya aktarýlacak
+                                        veri <= veri_i;  // her cekilmede veri dataya aktarÄ±lacak
                                         // veri_kontrol <= veri_i;
                                     end else begin
                                         gec <= 0;
-                                        durum <= VERI_AL2;
+                                        durum <= 1;
                                     end 
                                 end else begin
                                     if(gec < 2)begin 
                                         gec <= gec + 1;
-                                        mem[indis] <= veri_i;  // her cekilmede veri dataya aktarýlacak
+                                        veri <= veri_i;  // her cekilmede veri dataya aktarÄ±lacak
                                         // veri_kontrol <= veri_i;
                                     end else begin
                                         gec <= 0;
-                                        durum <= VERI_AL2;
+                                        durum <= 1;
                                     end  
                                 end
                             end else begin
-                                veri_al <= 0;
+                                veri_al <= 1;
                                 indis <= 0;
                                 ind <= 0;
-                                durum <= 0;
+                                durum<=3;
                             end
                         end else begin
                         end 
@@ -103,18 +119,20 @@ reg [8:0] k = 0, m = 0;
                         durum <= VERI_AL1;
                     end 
             
+                    /*
                     0:begin                  
                         if(i<256) begin
                            histogram_out[i] <= 0;
                            i<=i+1;
                         end else begin
                           i<=0;
-                          durum<=1; end
+                          durum<=1; 
+                        end
                     end
-                    
+                    */
                     1:begin                     
                        if(i<max_row) begin
-                          a<=mem[i];
+                          a<=veri;
                           durum<=2;
                        end else begin
                           durum<=3;                         
@@ -124,7 +142,7 @@ reg [8:0] k = 0, m = 0;
                     2:begin
                           histogram_out[a] <= histogram_out[a] + 1;
                           i<=i+1;
-                          durum<=1;
+                          durum<=VERI_AL2;
                      end
                      3:begin
                         if(k < 256) begin

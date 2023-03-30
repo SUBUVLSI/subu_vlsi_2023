@@ -1,212 +1,205 @@
 `timescale 100ns / 1ps
 
+
 module histogram_esitleme(
         input clk
 
     );
     
-    
-    integer i = 0, sayac = 0, k = 0, m=0, x=1;
-    reg [15:0] durum = 16'b0000000000000000;
-
-    reg [19:0] histogram_out [0:255];
-    reg [7:0] a;
-    reg bitti = 0;
-
     parameter max_row = 76800;
-    reg [7:0] mem [0:max_row-1];
+    reg [4:0] durum = 5'b00000;
     
-    reg [19:0] c;
-    reg [19:0] cdf [0:255];
-    reg [19:0] cdf_min;
+    integer i = 0, sayac = 0, k = 0, m = 0, p_ind = 0;
     reg son=0;
-    reg signed [19:0] eq_hist [0:255];
-    reg signed [19:0] sub [0:255] ;
-    reg [19:0] sub_row;
-    reg signed [19:0] div [0:255];
-    integer y=0, z=0, t=0;
-
-
     
+    reg [23:0] histogram [0:255];
+    reg [23:0] histogram_out [0:255]; 
+    reg [7:0] mem [0:max_row-1];
+    reg [7:0] yeni_mem [0:max_row-1];
+    reg [23:0] cdf_reg;
+    reg [23:0] cdf [0:255];
+    reg [23:0] cdf_min; 
+    reg signed [7:0] eq_hist [0:255];
+    reg signed [28:0] sub [0:255] ;
+    reg [23:0] sub_row;
+    reg [15:0] h_sub_row;
+    reg signed [7:0] div [0:255];
+    reg signed [28:0] round [0:255];
+    reg signed [28:0] fark [0:255];
+  
+    initial begin
+        $readmemb("C:\\Users\\aysim\\Desktop\\deneme.txt",histogram);  
+    end
     initial begin
         $readmemb("C:\\Users\\aysim\\Desktop\\resim_pikselleri_binary.txt",mem);  
     end
 
     always @(posedge clk) begin
-        sayac = sayac + 1;
+        sayac <= sayac + 1;
         case(durum)
             0:begin
-                if(i < 256) begin
-                    histogram_out[i] <= 0;
-                    i <= i + 1;
+                if( i < 256) begin
+                    histogram_out[i] <= histogram[i][23:0];
+                    i <= i+1;
                 end else begin
-                    i <= 0;
-                    durum = 1; 
+                    durum <= 1;
                 end
             end
-            
             1:begin
-                if(i < max_row) begin
-                    a <= mem[i];
-                    durum = 2;
-                end else begin
-                    durum = 3;
-                end    
-            end
-            
-            2:begin
-                    histogram_out[a] <= histogram_out[a] + 1;
-                    i <= i + 1;
-                    durum = 1;
-            end
-            
-            3:begin
-                    bitti = 1;
-                    durum=4;
-            end
-       
-            4:begin
-                if(k<256) begin
+                if(k < 256) begin
                    cdf[k] <= 0;
                    k <= k+1;
                 end else begin
-                  k<=1;
-                  durum=5;
+                  k <= 1;
+                  durum <= 2;
                 end
             end
-            5:begin
-                cdf[0] <= histogram_out[0];
-                durum = 6;
+            2:begin
+               cdf[0] <= histogram_out[0];
+                durum <= 3;
             
             end
-            6:begin
-                if(k<256)begin
-                
-                    if((histogram_out[k] != 0) && (x<256) )begin
-                        c <= histogram_out[k];
-                        
-                        durum=7;
-                    end else begin
-                        k <= k+1;
-                        durum=6;
-                    end
+           3:begin
+                if(k < 256) begin
+                    cdf_reg <= histogram_out[k];
+                    durum <= 4;
                 end else begin
-                    durum=8;
+                 
+                    durum <= 5;
                 end
             
             end
 
-             7:begin
-              
-                   cdf[x] <= cdf[x-1] + c;
+             4:begin
+                   cdf[k] <= cdf[k-1] + cdf_reg;
                    k <= k+1;
-                   x <= x+1;
-                  durum = 6;
+                   durum <= 3;
                 end
              
-             
-             8:begin
+             5:begin
                 
-                if(m<256) begin
+                if(m < 256) begin
                      if(cdf[m] != 0) begin
                           cdf_min <= cdf[m];
                           k <= 0;
-                          durum = 9;
+                          durum <= 6;
                      end else begin
                         m <= m+1;
-                        durum=8;
+                        durum <= 5;
                      end
                 end
                 
              end
- 
-             9:begin
-                if(k<256) begin
-                    sub[k] <= cdf[k] - cdf_min;
-                    k <= k+1;
+
+             6:begin
+                if(k < 256) begin
+                    sub[k] <= cdf[k] - cdf_min;                    
+                    durum <= 7;
                 end else begin
-                    k<=0;
-                    durum=10;
+                    k <= 0;
+                    durum <= 8;
                 end
              
              end
-             10:begin
-                if(k<256) begin
+             
+             7:begin
+                if(sub[k] < 0) begin
+                    sub[k] <= 0;
+                    k <= k+1;
+                    durum <= 6;
+                end else begin
+                    k <= k+1;
+                    durum <= 6;
+                end
+             end
+             
+             8:begin
+                if(k < 256) begin
                     sub[k] <= sub[k] * 255;
                     k <= k+1;
                 end else begin
-                    k<=0;
-                    durum=11;
+                    k <= 0;
+                    durum <= 9;
                 end
              end
-             11:begin
+             
+             9:begin
                     sub_row <= max_row - cdf_min;
-                    durum=12;
-                
+                    durum <= 10;
              end
-             12:begin
-                if (k<256) begin
-                    div[k] <= sub[k] / sub_row;
-                    k <= k+1;
+             
+             10:begin
+                if (k < 256) begin
+                    div[k] <= sub[k] / sub_row;                 
+                    durum <= 11;
                 end else begin
-                    k<=0;
-                    durum=13;
+                    k <= 0;
+                    durum <= 15;
                 end        
              end
+             
+             11:begin
+                    round[k] <= div[k] * sub_row;                    
+                    durum <= 12;
+             end
+             
+             12:begin
+                    h_sub_row <= sub_row / 2;
+                    durum <= 13;
+             end
+             
              13:begin
-                if (k<256) begin
+                    fark[k] <= sub[k] - round[k];
+                    durum <= 14;                
+             end
+             
+             14:begin
+                if(fark[k] >= h_sub_row) begin
+                    div[k] <= div[k] +1;
+                    k <= k+1;
+                    durum <= 10;
+                end else begin
+                    k <= k+1;
+                    durum <= 10;
+                end
+             end
+             
+             15:begin
+                if (k < 256) begin
                      eq_hist[k] <= div[k];
                      k <= k+1;
                 end else begin
-                    durum=14;
+                    durum <= 16;
                 end
              end
 
-             14:begin
-                if(y<max_row) begin
-                    if(z<256) begin
-                        if(mem[y] == z) begin
-                            mem[y-1] <= eq_hist[t];
-                            t <= t+1;
-                            y <= y+1;
-                            z <= 0 ;
-                         
-                        end else begin
-                            z <= z+1;
-                        end
-                    end else begin
-                        z <=0;
-                        y<=y+1;  
-                    end
+           16:begin
+                if(p_ind < max_row) begin       
+                     yeni_mem[p_ind] <= eq_hist[mem[p_ind]];
+                     p_ind <= p_ind+1;
                 end else begin
-                
-                    durum=15;
-                
+                    durum <= 17;
                 end
-             end
-             15:begin
-                son=1;
-                
-             end
-          endcase
- 
+           end
+  
+           17:begin
+                son <= 1;            
+           end
+        endcase
     end
     
     integer j,f;
     
      initial begin 
-        #400000
-        f=$fopen("C:\\Users\\aysim\\Desktop\\toplam.txt","w"); 
+        #150000
+        f=$fopen("C:\\Users\\aysim\\Desktop\\esit.txt","w"); 
       end
         initial begin
-              #406000
+              #400000
               for (j = 0; j<max_row; j=j+1) 
-                  $fwrite(f,"%d\n",eq_hist[j]); 
-              #406100
+                  $fwrite(f,"%d\n",yeni_mem[j]); 
+              #490000
               $fclose(f);
         end
-
-    
+  
 endmodule
-    
-

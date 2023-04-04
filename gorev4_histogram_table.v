@@ -72,14 +72,6 @@ initial begin
     for(i = 0; i<256; i=i+1) begin
         histogram_out[i] <= 0;
     end
-    
-//    if(i<256) begin
-//       histogram_out[i] <= 0;
-//       i<=i+1;
-//    end else begin
-//      i<=0;
-//      durum<=1; 
-//    end
 end 
 
     always @(posedge clk_i) begin
@@ -140,27 +132,7 @@ end
                         indis <= indis + 1;
                         durum <= VERI_AL1;
                     end 
-                    /*
-                    0:begin                  
-                        if(i<256) begin
-                           histogram_out[i] <= 0;
-                           i<=i+1;
-                        end else begin
-                          i<=0;
-                          durum<=1; 
-                        end
-                    end
-                    */
-                    /*
-                    1:begin                     
-                       if(i<max_row) begin
-                          a<=veri;
-                          durum<=2;
-                       end else begin
-                          durum<=3;                         
-                       end      
-                    end
-                    */
+                    
                     2:begin
                           histogram_out[a] <= histogram_out[a] + 1;
                           i<=i+1;

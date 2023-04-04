@@ -5,7 +5,7 @@
 // 
 // Create Date: 17.02.2023 13:11:42
 // Design Name: 
-// Module Name: gorev4_top
+// Module Name: gorev4_top_tb
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module gorev4_top(
+module gorev4_top_tb(
     
     input clk_i, rst_i,en_i,
     output reg  son_o
@@ -233,7 +233,7 @@ module gorev4_top(
         end
     
     
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satÃ½r
     ram#(.V(8),.S(76800),.A(17)) RAM1(
         .clk_i(clk_i),
         .en_i(en_ram1),
@@ -256,7 +256,7 @@ module gorev4_top(
     
 
 
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satÃ½r
     ram#(.V(32),.S(256),.A(9)) RAM_HISTORGAM_TABLE(
         .clk_i(clk_i),
         .en_i(en_ram_htable),

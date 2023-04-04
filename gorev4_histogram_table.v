@@ -113,21 +113,25 @@ end
                     ILK_VERI:begin
                         if(gec < 4)begin 
                             gec <= gec + 1;
-                            veri <= veri_i;  // her cekilmede veri dataya aktar�lacak
+//                            veri <= veri_i;  // her cekilmede veri dataya aktar覺lacak
                             // veri_kontrol <= veri_i;
+                            a <= veri_i;  // her cekilmede veri dataya aktar覺lacak
                         end else begin
                             gec <= 0;
-                            durum <= 1;
+                            durum<=2;
+//                            durum <= 1;
                         end 
                     end 
                     DIGER_VERILER:begin
                         if(gec < 2)begin 
                             gec <= gec + 1;
-                            veri <= veri_i;  // her cekilmede veri dataya aktar�lacak
+//                            veri <= veri_i;  // her cekilmede veri dataya aktar覺lacak
+                            a <= veri_i;  // her cekilmede veri dataya aktar覺lacak
                             // veri_kontrol <= veri_i;
                         end else begin
                             gec <= 0;
-                            durum <= 1;
+                            durum<=2;
+//                            durum <= 1;
                         end 
                     end 
                     
@@ -147,6 +151,7 @@ end
                         end
                     end
                     */
+                    /*
                     1:begin                     
                        if(i<max_row) begin
                           a<=veri;
@@ -155,7 +160,7 @@ end
                           durum<=3;                         
                        end      
                     end
-                    
+                    */
                     2:begin
                           histogram_out[a] <= histogram_out[a] + 1;
                           i<=i+1;
@@ -177,9 +182,6 @@ end
                             durum<=5;
                           end
                      end
-
-                     
-
                      
                     5:begin
                         bitti=1;

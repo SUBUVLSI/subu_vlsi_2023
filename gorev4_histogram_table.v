@@ -19,8 +19,8 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
-module gorev4_histogram_table(
+// gorev4_histogram_table
+module gorev4(
 input clk_i, rst_i, en_i,
     input [7:0] veri_i,
     output veri_al_o,veri_gonder_o,
@@ -132,7 +132,7 @@ end
                         indis <= indis + 1;
                         durum <= VERI_AL1;
                     end 
-                    
+                  
                     2:begin
                           histogram_out[a] <= histogram_out[a] + 1;
                           i<=i+1;

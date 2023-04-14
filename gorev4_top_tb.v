@@ -1,25 +1,7 @@
 `timescale 100ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 17.02.2023 13:11:42
-// Design Name: 
-// Module Name: gorev4_top_tb
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
 
-module gorev4_top_tb(
+
+module gorev4_top(
     
     input clk_i, rst_i,en_i,
     output reg  son_o
@@ -146,7 +128,7 @@ module gorev4_top_tb(
                         end else begin
                             //indis <= 0;
                             ind <= 0;
-                            en_ram_htable = 0;
+                            en_ram_htable = 1;
                             we_ram_htable = 0; // okuma
                             addr_ram_htable = ind; 
                             durum <= 12;
@@ -207,19 +189,7 @@ module gorev4_top_tb(
     
     
     integer j,f;
-    /*
-     initial begin 
-        #7700
-        f=$fopen("D:\\vivado\\gorev4_cikti.txt","w"); 
-      end
-        initial begin
-              #3434496
-              for (j = 0; j<256; j=j+1) 
-                  $fwrite(f,"%b\n",cikti_mem[j]); 
-              #3439496
-              $fclose(f);
-        end
-    */
+    
     initial begin 
         #7700
         f=$fopen("D:\\vivado\\gorev4_cikti.txt","w"); 
@@ -233,7 +203,7 @@ module gorev4_top_tb(
         end
     
     
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satır
     ram#(.V(8),.S(76800),.A(17)) RAM1(
         .clk_i(clk_i),
         .en_i(en_ram1),
@@ -256,7 +226,7 @@ module gorev4_top_tb(
     
 
 
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satır
     ram#(.V(32),.S(256),.A(9)) RAM_HISTORGAM_TABLE(
         .clk_i(clk_i),
         .en_i(en_ram_htable),

@@ -140,7 +140,7 @@ module gorev6(
                     ILK_VERI:begin
                         if(gec < 4)begin 
                             gec <= gec + 1;
-                            gray2bw_deger_gir <= veri_i;  // her cekilmede veri dataya aktarýlacak
+                            gray2bw_deger_gir <= veri_i;  // her cekilmede veri dataya aktarÄ±lacak
                         end else begin
                             gec <= 0;
                             durum <= 1;
@@ -150,7 +150,7 @@ module gorev6(
                     DIGER_VERILER:begin
                         if(gec < 2)begin 
                             gec <= gec + 1;
-                            gray2bw_deger_gir <= veri_i;  // her cekilmede veri dataya aktarýlacak
+                            gray2bw_deger_gir <= veri_i;  // her cekilmede veri dataya aktarÄ±lacak
                         end else begin
                             gec <= 0;
                             durum <= 1;
@@ -205,7 +205,7 @@ module gorev6(
                         end 
                    end
                    
-                   // ILK ARR RAM GRAY2BW ÇIKTILARI ILE DOLDURULUR
+                   // ILK ARR RAM GRAY2BW Ã‡IKTILARI ILE DOLDURULUR
                    4:begin
                         if(ilk_ind < max_veri && stn < 240)begin
                             durum <= 5;
@@ -501,7 +501,7 @@ module gorev6(
     
     
     // gray2bw ram 
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satÄ±r
     dual_port_ram#(.V(8),.S(76800),.A(17)) gray2bwRAM(
         .clk_i(clk_i),
         .en_i(en_ram_gray2bw),

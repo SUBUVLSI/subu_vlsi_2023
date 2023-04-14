@@ -1,0 +1,361 @@
+`timescale 100ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 17.02.2023 13:11:42
+// Design Name: 
+// Module Name: gorev4_top
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+module gorev4_top
+    
+    #(
+        parameter   max_row = 76800,
+                            c_clkfreq    = 100_000_000,
+                            c_baudrate   = 115_200
+    )
+    
+    (
+    input clk_i, rst_i,en_i,
+    input   wire    i_Rx_Serial,
+    input   wire    i_wenable,
+    input   wire    i_renable,
+    output  wire    o_Tx_Serial,   
+    output  reg     led_tx,
+    output  reg     led_rx,
+    output reg  son_o
+
+    );
+    
+    
+    reg [0:4] durum = 0;
+    integer sayac = 0, gec = 0;
+    
+    
+    // RAM1
+    reg en_ram1;
+    reg we_ram1;
+    reg [16:0] addr_ram1;
+    reg [7:0] data_i_ram1;
+    wire [7:0] data_o_ram1;
+    
+    // ram_htable
+    reg en_ram_htable;
+    reg we_ram_htable;
+    reg [8:0] addr_ram_htable;
+    reg [31:0] data_i_ram_htable;
+    wire [31:0] data_o_ram_htable;
+    
+    //tx
+    reg         i_Tx_start;
+    reg [7:0]   i_Tx_Byte = 0;
+    wire        o_Tx_Done;
+    wire        o_Tx_Active;
+    
+    //rx
+    wire        o_Rx_done;
+    wire [7:0]  o_Rx_Byte;
+    
+    reg [20:0] counter = 0;
+    reg [3:0] drm = 0;
+
+    
+    integer ind = 0, indis = 0;
+    wire veri_gonder, veri_al;
+    reg en_gorev4;
+    reg [7:0] veri_i_gorev4;
+    wire [31:0] veri_o_gorev4;
+    wire islem_bitti;
+    wire [5:0] durum_oku;
+    wire [16:0] indis_kontrol;
+    
+
+    ///////////////////////////////////////
+    reg [31:0] shift_reg = 0;
+    reg [3:0] buffer_segment = 0;
+    reg [31:0] data_reg = 0;
+    reg [20:0] cntr = 0;
+    
+    reg bit = 0;
+    always@(posedge clk_i)begin
+        if(rst_i)begin
+        end else begin
+            if(en_i)begin
+                sayac <= sayac + 1;
+                case(durum)
+                    0:begin
+                        en_ram1 = 1;
+                        we_ram1 = 1;
+                        addr_ram1 <= ind;
+                        durum = 1;
+                    end 
+                    
+                    1:begin
+                        if(i_wenable) begin //switch
+                             
+                           if(o_Rx_done) begin
+                               en_ram1 <= 1'b1;
+                               we_ram1 <= 1'b1;
+                               data_i_ram1  <= o_Rx_Byte;
+                               addr_ram1    <= indis;
+                               indis        <= indis + 1;
+                               counter      <= counter +1;
+                           end 
+                           
+                           if(counter == max_row) begin ///mem_satir+1
+                                led_rx      <= 1'b1;
+                                led_tx      <= 1'b0;
+                                addr_ram1   <= ind;
+                                en_ram1     <= 1'b1;
+                                we_ram1     <= 1'b0;
+                                indis       <= 0;
+                                durum       <= 2;
+                            end 
+                        end
+                    end
+                    
+                    2:begin
+                        en_ram1 = 1;
+                        we_ram1 = 0;
+                        en_gorev4 <= 1;
+                        durum <= 3;
+                    end 
+                    
+                    // ALT MODULE GONDER
+                    3:begin
+                        if(veri_al == 1 && ind < max_row)begin
+                            durum <= 4;
+                        end else begin
+                            ind <= 0;
+                            en_ram_htable = 1;
+                            we_ram_htable = 1;
+                            addr_ram_htable = 0;
+                            durum <= 6;
+                        end
+                    end 
+                    4:begin
+                        if(gec < 4)begin  // 3
+                            gec <= gec + 1;
+                            veri_i_gorev4 <= data_o_ram1;
+                        end else begin
+                            ind <= ind + 1;
+                            gec <= 0;
+                            durum <= 5;
+                        end
+                    end 
+                    5:begin
+                        addr_ram1 <= ind;
+                        durum <= 3;
+                    end
+                    
+                    
+                    // ALT MODULDEN AL
+                    6:begin
+                        if(islem_bitti == 1 && veri_gonder == 1)begin
+                            durum <= 7;
+                        end else begin
+                            bit <= 1;
+                        end 
+                    end
+                    
+                    7:begin
+                        if(indis < 256)begin
+                            durum <= 8;
+                        end else begin
+                            //indis <= 0;
+                            ind <= 0;
+                            en_ram_htable = 0;
+                            we_ram_htable = 0; // okuma
+                            addr_ram_htable = ind; 
+                            durum <= 12;
+                        end 
+                    end 
+                    
+                    8:begin
+                        if(indis < 1)begin
+                            durum <= 9;
+                        end else begin
+                            durum <= 10;
+                        end 
+                    end 
+                    
+                    9:begin
+                        if(gec < 2)begin   //8
+                            gec <= gec + 1;
+                            en_ram_htable = 1;
+                            we_ram_htable = 1; // yazma
+                            data_i_ram_htable <= veri_o_gorev4;
+                        end else begin
+                            gec <= 0;
+                            indis <= indis + 1;
+                            durum <= 11;
+                        end
+                    end
+                    
+                    10:begin
+                        if(gec < 2)begin  
+                            gec <= gec + 1;
+                            en_ram_htable = 1;
+                            we_ram_htable = 1; // yazma
+                            data_i_ram_htable <= veri_o_gorev4;
+                        end else begin
+                            gec <= 0;
+                            indis <= indis + 1;
+                            durum <= 11;
+                        end
+                    end 
+                    
+                    11:begin
+                        addr_ram_htable <= indis;
+                        durum <= 7;
+                    end
+                    
+                    12: begin
+                    
+                        if(i_renable) begin
+                            led_rx <= 1'b0;
+                            
+                            case(drm) 
+                            
+                            0:  begin
+                                        we_ram_htable <= 1'b0; 
+                                        en_ram_htable <= 1'b1;
+                                        drm <= 4'b0100;
+                                end
+                                
+                            4: begin
+                                
+                                data_reg <= data_o_ram_htable;
+                                addr_ram_htable <= addr_ram_htable +1;
+                                cntr <= cntr +1;
+                                drm <= 4'b0001;
+                                
+                            end
+                            
+                            1:  begin
+                                    
+                                    if(buffer_segment == 4) begin
+                                            buffer_segment <= 0;
+                                            
+                                            if(cntr > 255) begin
+                                                drm <= 4'b0011;
+                                            end else begin
+                                                drm <= 4'b0000;
+                                            end
+                                    end else begin 
+                                         {i_Tx_Byte,shift_reg[23:0]} <= data_reg;   
+                                         drm = 4'b0010;
+                                    end
+                                  end   
+                             
+                             2: begin
+                                 // 1111_2222_3333_4444
+                                        i_Tx_start <= 1'b1;
+                                      if(o_Tx_Done) begin            
+                                                    // 2222_3333_4444_0000   
+                                          buffer_segment <= buffer_segment +1;
+                                          data_reg <= shift_reg << 8;
+                                          drm <= 4'b0001;
+                                      end
+                                
+                                end 
+                             
+                             3: begin
+                                    i_Tx_start <= 1'b0;
+                                    led_tx <= 1'b1;
+                                    durum <= 13;
+                                end
+                                    
+                            endcase  
+                            end
+                    end
+                    
+                    13:begin
+                        son_o <= 1;
+                    end 
+                    
+                    
+                endcase
+            end else begin 
+            end
+        end 
+    end 
+    
+
+
+    
+    
+    // 8 bitlik ram / 76800 satır
+    ram#(.V(8),.S(76800),.A(17)) RAM1(
+        .clk_i(clk_i),
+        .en_i(en_ram1),
+        .we_i(we_ram1),
+        .address_i(addr_ram1),
+        .data_i(data_i_ram1),
+        .data_o(data_o_ram1)
+    );
+    
+    
+    gorev4_histogram_table gorev4_htable(
+    .clk_i(clk_i),
+    .rst_i(rst_i),
+    .en_i(en_gorev4),
+    .veri_i(veri_i_gorev4),
+    .veri_o(veri_o_gorev4),
+    .veri_al_o(veri_al),   
+    .veri_gonder_o(veri_gonder),
+    .islem_bitti_o(islem_bitti));
+    
+
+
+    // 8 bitlik ram / 76800 satır
+    ram#(.V(32),.S(256),.A(9)) RAM_HISTORGAM_TABLE(
+        .clk_i(clk_i),
+        .en_i(en_ram_htable),
+        .we_i(we_ram_htable),
+        .address_i(addr_ram_htable),
+        .data_i(data_i_ram_htable),
+        .data_o(data_o_ram_htable)
+    );
+    
+    uart_tx_t 
+    #(
+        .c_clkfreq  (c_clkfreq),
+        .c_baudrate (c_baudrate)
+    )
+    uart_tx_ram
+    (
+        .i_clk         (clk_i),
+        .i_Tx_start    (i_Tx_start),	
+        .i_Tx_Byte     (i_Tx_Byte),
+        .o_Tx_Active   (o_Tx_Active),		
+        .o_Tx_Serial   (o_Tx_Serial),   
+        .o_Tx_Done     (o_Tx_Done)
+    );
+
+    uart_rx_t
+    #(   
+        .c_clkfreq   (c_clkfreq),
+        .c_baudrate  (c_baudrate)     
+    )
+    uart_rx_ram
+    (
+        .i_clk          (clk_i),
+        .i_Rx_Serial    (i_Rx_Serial),    	
+        .o_Rx_done      (o_Rx_done),		
+        .o_Rx_Byte 		(o_Rx_Byte)
+    );
+    
+endmodule

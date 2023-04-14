@@ -5,7 +5,7 @@
 // 
 // Create Date: 31.03.2023 14:45:34
 // Design Name: 
-// Module Name: gorev6_top_tb
+// Module Name: gorev6_top
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,7 +20,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module gorev6_top_tb(
+module gorev6_top(
     input clk_i, rst_i,en_i,
     output reg son_o
     );
@@ -144,7 +144,7 @@ module gorev6_top_tb(
                         end else begin
                             indis <= 0;
                             ind <= 0;
-                            en_ram2 = 0;
+                            en_ram2 = 1;
                             we_ram2 = 0; // okuma
                             addr_ram2 = ind; 
                             
@@ -222,7 +222,7 @@ module gorev6_top_tb(
     
     
     
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satır
     ram#(.V(8),.S(76800),.A(17)) RAM1(
         .clk_i(clk_i),
         .en_i(en_ram1),
@@ -245,7 +245,7 @@ module gorev6_top_tb(
     
 
 
-    // 8 bitlik ram / 76800 satýr
+    // 8 bitlik ram / 76800 satır
     ram#(.V(8),.S(76800),.A(17)) RAM2(
         .clk_i(clk_i),
         .en_i(en_ram2),

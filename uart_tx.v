@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module uart_tx (
+module uart_tx(
    input  wire          clk_i,
    input  wire          rstn_i,
    input  wire  [7:0]   din_i,
@@ -90,7 +90,7 @@ module uart_tx (
                S_STOP  :
                begin
                   // Wait CLKS_PER_BIT-1 clock cycles for Stop bit to finish
-                  if (bittimer == baud_div-1) begin // stop bit 1 olarak aldým // parameter c_stopbitlim = (c_clkfreq/c_baudrate)*c_stopbit; c_stopbit=baud_div=1
+                  if (bittimer == baud_div-1) begin // stop bit 1 olarak aldÄ±m // parameter c_stopbitlim = (c_clkfreq/c_baudrate)*c_stopbit; c_stopbit=baud_div=1
                      state			    <= S_IDLE;
                      tx_done_tick_o		<= 1;
                      bittimer			<= 0;

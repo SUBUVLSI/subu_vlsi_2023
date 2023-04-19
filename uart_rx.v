@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module uart_rx (
+module uart_rx(
     input  wire  		clk_i,
     input  wire  		rstn_i,
     input  wire  		rx_i,
@@ -24,9 +24,6 @@ module uart_rx (
    reg r_Rx_Data   = 1'b1;
 
 
-   // Purpose: Double-register the incoming data.
-   // This allows it to be used in the UART RX Clock Domain.
-   // (It removes problems caused by metastability)
    always @(posedge clk_i, negedge rstn_i) begin
       if (!rstn_i) begin
          r_Rx_Data_R  <= 1'b1;
@@ -39,7 +36,6 @@ module uart_rx (
       end
    end
 
-   // Purpose: Control RX state machine
    always @(posedge clk_i, negedge rstn_i) begin
       if (!rstn_i) begin
          state	        <= S_IDLE;
@@ -64,9 +60,8 @@ module uart_rx (
                   end else begin
                      bittimer	<= bittimer + 1;
                   end
-               end // case: S_START
+               end 
 
-               // Wait CLKS_PER_BIT-1 clock cycles to sample serial data
                S_DATA  : begin
                   if (bittimer == baud_div-1) begin
                      if ( bitcntr == 7 ) begin
@@ -84,7 +79,6 @@ module uart_rx (
                end 
 
 
-               // Receive Stop bit.  Stop bit = 1
                S_STOP: begin
                   if (bittimer == baud_div-1) begin
                      state			<= S_IDLE;
@@ -93,7 +87,7 @@ module uart_rx (
                   end else begin
                      bittimer	<= bittimer + 1;
                   end
-               end // case: S_STOP
+               end 
 
                default : begin 
                   state <= S_IDLE;

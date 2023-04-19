@@ -24,10 +24,7 @@ module gorev5(
     integer i = 0, sayac = 0, k = 0, m = 0, p_ind = 0, l = 0, n = 0, s = 0, z = 0;
     reg son=0;
     
-//    reg [23:0] histogram [0:255];
     reg [23:0] histogram_out [0:255]; 
-    //reg [7:0] mem [0:max_row-1];
-//    reg [7:0] yeni_mem [0:max_row-1];
     reg [23:0] cdf_reg;
     reg [23:0] cdf [0:255];
     reg [23:0] cdf_min; 
@@ -213,19 +210,10 @@ module gorev5(
                  10:begin
                     div_deg <= sub_deg / sub_row;  
                     durum <= 11;
-                 /*
-                    if (s < 256) begin
-                        div[s] <= sub[s] / sub_row;                 
-                        durum <= 11;
-                    end else begin
-                        s <= 0;
-                        durum <= 15;
-                    end   
-                    */     
+       
                  end
                  
                  11:begin
-//                        round[s] <= div[s] * sub_row;  
                         round_deg <= div_deg * sub_row;  
                         div[s] <= div_deg;                 
                         durum <= 12;
@@ -237,7 +225,6 @@ module gorev5(
                  end
                  
                  13:begin
-//                        fark[s] <= sub[s] - round[s];
                         fark_deg <= sub_deg - round_deg;
                         durum <= 14;                
                  end
@@ -317,7 +304,6 @@ module gorev5(
                     
                 ISLEM:begin
                     if(p_ind < max_row)begin
-//                        yeni_mem[p_ind] <= eq_hist[veri];
                         en_ram_yeni = 1; 
                         we_ram_yeni = 1; // yazma
                         data_i_ram_yeni <= eq_hist[veri];
@@ -344,7 +330,6 @@ module gorev5(
                 VERI_GONDER2:begin
                     if(gec < 3) begin
                         gec <= gec + 1;
-//                        veri_o_gorev5 <= yeni_mem[ind];
                           en_ram_yeni = 1; 
                           we_ram_yeni = 0; // okuma
                           veri_o_gorev5 <= data_o_ram_yeni;

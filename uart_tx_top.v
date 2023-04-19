@@ -1,23 +1,5 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company:
-// Engineer:
-//
-// Create Date: 03/14/2022 07:53:48 PM
-// Design Name:
-// Module Name: uart_tx_top
-// Project Name:
-// Target Devices:
-// Tool Versions:
-// Description:
-//
-// Dependencies:
-//
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-//
-//////////////////////////////////////////////////////////////////////////////////
+
 
 
 module uart_tx_top(
@@ -29,7 +11,8 @@ module uart_tx_top(
       input  wire   [7:0]   UART_Veri_Yazma_Yazmaci_wdata, // fifo icine yazilacak olan veriler. UART_Kontrol_Yazmaci_tx_Active avtif oldugunda fifo icinden disari gidecek olan veri ayni zamanda
       output wire           UART_Durum_Yazmaci_tx_full,    // indicates that fifo is full
       output wire           UART_Durum_Yazmaci_tx_empty,     // indicates that fifo is empty
-      output wire           uart_tx_o // serial data out
+      output wire           uart_tx_o, // serial data out
+      output reg           UART_veri_gonderildi
    );
 
    // fifo signals
@@ -75,6 +58,7 @@ module uart_tx_top(
          tx_start_i  <= 1'b0;
          fifo_rd     <= 1'b0;
          state       <= S_IDLE;
+         
       end
       else
       begin
@@ -83,6 +67,7 @@ module uart_tx_top(
          case (state)
             S_IDLE: begin
                if ( UART_Kontrol_Yazmaci_tx_Active && !UART_Durum_Yazmaci_tx_empty ) begin
+                    UART_veri_gonderildi <= 1'b0;
                   fifo_rd     <= 1'b1;
                   din_i       <= fifo_r_data;
                   state       <= S_FIFO_READ;
@@ -97,6 +82,7 @@ module uart_tx_top(
 
             S_UART_TRANSMIT: begin
                if (tx_done_tick_o) begin // gonderim tamamlandi
+                  UART_veri_gonderildi <= 1'b1;
                   state   <= S_IDLE;
                end
             end
@@ -108,7 +94,7 @@ module uart_tx_top(
       end
    end
 
-   uart_tx uart_tx_inst (
+   uart_tx uart_tx_Inst (
       .clk_i            (clk_i                              ),
       .rstn_i           (rstn_i                             ),
       .din_i            (din_i                              ),

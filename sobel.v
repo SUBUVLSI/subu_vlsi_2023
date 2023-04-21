@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 
-module sobel ( 
+module sobel1 ( 
     input clk_i_s,rst_i_s,
     input en_i,
     input [7:0] data_i_0 , 
@@ -17,7 +17,8 @@ module sobel (
     output sonuc_done
      );
     reg sonuc_done_s=0;
-    reg signed [8:0]  data_i_reg [0:8];
+    reg signed [8:0]  data_i_regx [0:8];
+    reg signed [8:0]  data_i_regy [0:8];
     reg signed [19:0] mult_data_x [0:8];
     reg signed [19:0] mult_data_x_reg [0:8]; 
     reg signed [19:0] sum_data_x = 0 ;  
@@ -62,7 +63,7 @@ module sobel (
    end
 
     always @ (posedge clk_i_s) begin  
-        if(rst_i_s) begin 
+        if(!rst_i_s) begin 
         sayac = 0;
         i = 0;
         
@@ -72,27 +73,47 @@ module sobel (
             case (durum)
                 0:begin
                  if(sayac<3)begin
-                    data_i_reg[0]=data_i_0;
-                    data_i_reg[1]=data_i_1;
-                    data_i_reg[2]=data_i_2;
-                    data_i_reg[3]=data_i_3;
-                    data_i_reg[4]=data_i_4;
-                    data_i_reg[5]=data_i_5;
-                    data_i_reg[6]=data_i_6;
-                    data_i_reg[7]=data_i_7;
-                    data_i_reg[8]=data_i_8;
+                    data_i_regx[0]=data_i_0;
+                    data_i_regx[1]=data_i_1;
+                    data_i_regx[2]=data_i_2;
+                    data_i_regx[3]=data_i_3;
+                    data_i_regx[4]=data_i_4;
+                    data_i_regx[5]=data_i_5;
+                    data_i_regx[6]=data_i_6;
+                    data_i_regx[7]=data_i_7;
+                    data_i_regx[8]=data_i_8;
                     sayac=sayac+1;
                       
                  end 
                  else begin
-                    durum = 1;
                     sayac=0;
+                    durum = 15;
+                   
                  end
                 
                 end
+                15:begin
+                  if(sayac<3)begin
+                    data_i_regy[0]=data_i_0;
+                    data_i_regy[1]=data_i_1;
+                    data_i_regy[2]=data_i_2;
+                    data_i_regy[3]=data_i_3;
+                    data_i_regy[4]=data_i_4;
+                    data_i_regy[5]=data_i_5;
+                    data_i_regy[6]=data_i_6;
+                    data_i_regy[7]=data_i_7;
+                    data_i_regy[8]=data_i_8;
+                    sayac=sayac+1;    
+                 end 
+                 else begin
+                    sayac=0;
+                    durum = 1;
+                    
+                 end 
+                end
                 1:begin
                   if(sayac<9)begin
-                    mult_data_x[i] <= kernel_sobel_x[i] * data_i_reg[i];
+                    mult_data_x[i] <= kernel_sobel_x[i] * data_i_regx[i];
                     sayac=sayac+1;
                     i=i+1;
                     durum=1;
@@ -133,7 +154,7 @@ module sobel (
                  sum_data_x_2 <= sum_data_x_2 + sum_data_x;
                  durum=5;
                 end
-                5:begin //eðer 0dan küçükse 0 a eiþtle 255den büyükse 255e eþitle
+                5:begin //e?er 0dan kÃ¼Ã§Ã¼kse 0 a ei?tle 255den bÃ¼yÃ¼kse 255e e?itle
                  if(sum_data_x_2<0)begin
                   sum_data_x_2 =0;
                   i=0;
@@ -156,7 +177,7 @@ module sobel (
                 end
                 6:begin
                   if(sayac<9)begin
-                    mult_data_y[i] <= kernel_sobel_y[i] * data_i_reg[i];
+                    mult_data_y[i] <= kernel_sobel_y[i] * data_i_regy[i];
                     sayac=sayac+1;
                     i=i+1;
                     durum=6;
@@ -197,7 +218,7 @@ module sobel (
                  sum_data_y_2 <= sum_data_y_2 + sum_data_y;
                  durum=10;
                 end
-                10:begin //eðer 0dan küçükse 0 a eiþtle 255den büyükse 255e eþitle
+                10:begin //e?er 0dan kÃ¼Ã§Ã¼kse 0 a ei?tle 255den bÃ¼yÃ¼kse 255e e?itle
                  if(sum_data_y_2<0)begin
                   sum_data_y_2 =0;
                  end
@@ -276,15 +297,15 @@ module sobel (
                  mult_data_y_reg[6]=0;
                  mult_data_y_reg[7]=0;
                  mult_data_y_reg[8]=0;
-                 data_i_reg[0]=0;
-                 data_i_reg[1]=0;
-                 data_i_reg[2]=0;
-                 data_i_reg[3]=0;
-                 data_i_reg[4]=0;
-                 data_i_reg[5]=0;
-                 data_i_reg[6]=0;
-                 data_i_reg[7]=0;
-                 data_i_reg[8]=0;
+                 data_i_regx[0]=0;
+                 data_i_regx[1]=0;
+                 data_i_regx[2]=0;
+                 data_i_regx[3]=0;
+                 data_i_regx[4]=0;
+                 data_i_regx[5]=0;
+                 data_i_regx[6]=0;
+                 data_i_regx[7]=0;
+                 data_i_regx[8]=0;
                  //sonuc=0;
                  //sonuc1=0;
                  g_sayac=0;

@@ -1,5 +1,23 @@
 `timescale 1ns / 1ps
-
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 27.03.2023 12:03:46
+// Design Name: 
+// Module Name: decode
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
 
 
 module decode(
@@ -7,15 +25,13 @@ input clk_i,rst_i,en_i,
     input [31:0] encoded_i,
     output sonuc_o,
     output [7:0] decoded_o,
-    output decode_et_o
-//    output [7:0] durum_oku_o,
-//    output [63:0] encoded_resim_o,
-//    output [10:0] asil_deger_dc_al_o
+    output decode_et_o,
+    output [7:0] durum_oku_o
     );
     
     integer sayac = 0, gec = 0;
     reg [7:0] durum = 0;
-//    assign durum_oku_o = durum;
+    assign durum_oku_o = durum;
     reg data_gonderme_ok = 1;
     assign sonuc_o = data_gonderme_ok;
     
@@ -37,7 +53,6 @@ input clk_i,rst_i,en_i,
     // VERI CEKME ICIN DEGISKENLER
     reg [31:0] buffer, data, ara_deger;
     reg [63:0] encoded_resim;
-//    assign encoded_resim_o = encoded_resim;
     integer cnt = 0; // ne kadar veri kullandık
     integer say = 0; // 32 bit bitti mi? 
     integer say_kontrol = 32;
@@ -58,7 +73,7 @@ input clk_i,rst_i,en_i,
     reg en_dc;
     reg [31:0] encoded_veri_i_dc;  
     wire [31:0] encoded_veri_o_dc;                                                                       
-    wire [10:0] dc_deger_dc,ac_deger_ac;      // rame yazilmayacak                                                                      
+    wire [10:0] dc_deger_dc;      // rame yazilmayacak                                                                      
     wire [10:0] asil_deger_dc;                                                                          
     wire [4:0] sagdaki_sifir_sayisi_dc; // max 20 olabilir 
     
@@ -135,6 +150,13 @@ input clk_i,rst_i,en_i,
     wire [31:0] fp_carp_cik;
     reg [31:0] fp_carp_ata;
     
+    // IP CORE OZEL
+    reg tready_r_carp = 1'b1;
+    reg b_tvalid_carp = 1'b1;
+    reg a_tvalid_carp = 1'b1; // 1 olurlarsa işlem tamamlanır
+    wire a_tready_carp,b_tready_carp;
+    wire tvalid_r_carp; // 1 olunca çıktı alınmış olur
+    
     // cos ayrık deger rom 
     reg rd_rom_cos;
     reg [11:0] addr_rom_cos;
@@ -166,6 +188,13 @@ input clk_i,rst_i,en_i,
     wire [31:0] fp_topla_cik;
     reg [31:0] fp_topla_ata;
     
+    // IP CORE OZEL
+    reg tready_r = 1'b1;
+    reg b_tvalid = 1'b1;
+    reg a_tvalid = 1'b1; // 1 olurlarsa işlem tamamlanır
+    wire a_tready,b_tready;
+    wire tvalid_r; // 1 olunca çıktı alınmış olur
+    
     reg [31:0] ram_toplam = 0; // ram satırlarını toplama
    
     // fp -> integer a donusum icin
@@ -188,11 +217,12 @@ input clk_i,rst_i,en_i,
     
     
     
-    
     reg bit = 0;
     reg islemler_bitti = 0;
     
-//    assign asil_deger_dc_al_o = asil_deger_dc_al;
+    
+    
+    
     always@(posedge clk_i)begin
         if(rst_i)begin
         end else begin
@@ -221,15 +251,15 @@ input clk_i,rst_i,en_i,
                             gec <= gec + 1;
                         end else begin
                             gec <= 0; 
-                            buffer <= encoded_i; // buffer bir kez ekilecek 32'b10000111110110111010110100101110; // 32'b10000111110110111010110100101110; //
                             indis_say <= indis_say + 1;
+                            buffer <= encoded_i; // buffer bir kez ekilecek 32'b10000111110110111010110100101110; //  32'b10000111110110111010110100101110; //
                             durum <= 0;
                         end
                     end 
                     102:begin
                         if(gec < 4)begin // ikinci veri için gec < 4 yap // bundan sonrakiler içi gec < 3 yap /AYR
                             gec <= gec + 1;
-                            data <= encoded_i;  // her cekilmede veri dataya aktarılacak 32'b01000000000110010001010010100101; //32'b01000000000110010001010010100101; //
+                            data <=  encoded_i;  // her cekilmede veri dataya aktarılacak 32'b01000000000110010001010010100101; // 32'b01000000000110010001010010100101; //
                         end else begin
                             gec <= 0; 
                             indis_say <= indis_say + 1;
@@ -251,7 +281,7 @@ input clk_i,rst_i,en_i,
                             gec <= gec + 1;
                         end else begin
                             gec <= 0;
-                            data <= encoded_i;  // her cekilmede veri dataya aktarılacak
+                            data <=  encoded_i;  // her cekilmede veri dataya aktarılacak
                             indis_say <= indis_say + 1;
                             data_gonderme_ok <= 0;
                             durum <= sonraki_durum;
@@ -278,7 +308,7 @@ input clk_i,rst_i,en_i,
                     
                     4:begin
                         // DC okuma
-                        if(gec < 250)begin 
+                        if(gec < 460)begin  // 250
                             gec <= gec + 1;
                         end else begin
                             gec <= 0;
@@ -348,7 +378,7 @@ input clk_i,rst_i,en_i,
                     // AC KONTROL
                     10:begin // 14
                         // AC okuma
-                        if(gec < 320)begin 
+                        if(gec < 540)begin // 320
                             gec <= gec + 1;
                         end else begin
                             gec <= 0;
@@ -592,7 +622,7 @@ input clk_i,rst_i,en_i,
                         end
                     end 
                     
-                   
+                    // CALISMADI
                     
                     22:begin
                         if(int_carp_k[21] == 1'b1)begin
@@ -604,7 +634,7 @@ input clk_i,rst_i,en_i,
                             durum <= 108;
                         end 
                     end
-                   
+                    
                     108:begin
                         kuantalama_sonucu_ram[satir_k] <= carp_oku;
                         satir_k <= satir_k + 1;
@@ -628,7 +658,7 @@ input clk_i,rst_i,en_i,
                     end
                     
                     24:begin    
-                        if(gec < 55) begin // 42 saykıl
+                        if(gec < 57) begin // 42 saykıl
                             gec = gec + 1;
                         end else begin
                             int_fp_deger <= int_fp_out;
@@ -681,15 +711,16 @@ input clk_i,rst_i,en_i,
                             gec <= gec + 1;
                         end else begin
                             gec = 0;
-                            fp_carp_gir1 <= data_out_ram_fp;
-                            fp_carp_gir2 <= data_out_rom_cos;
                             en_carp <= 1;
                             durum <= 28;
                         end
                     end 
                     
+                    // IP CORE
                     28:begin
-                        if(gec < 85)begin
+                        if(gec < 15)begin // 85 
+                            fp_carp_gir1 <= data_out_ram_fp;
+                            fp_carp_gir2 <= data_out_rom_cos;
                             gec <= gec + 1;
                         end else begin
                             gec <= 0;
@@ -698,7 +729,6 @@ input clk_i,rst_i,en_i,
                             durum <= 29;
                         end
                     end
-                    
                     // FP CARPMA / T ROM
                     29:begin
                         // t matrisi ile carpma
@@ -706,15 +736,16 @@ input clk_i,rst_i,en_i,
                             gec <= gec + 1;
                         end else begin
                             gec <= 0;
-                            fp_carp_gir1 <= fp_carp_ata;
-                            fp_carp_gir2 <= data_out_rom_t;
                             en_carp <= 1;
                             durum <= 30;
                         end
                     end
-                    
+                   
+                    // IP CORE
                     30:begin
-                        if(gec < 80)begin
+                        if(gec < 15)begin // 80
+                            fp_carp_gir1 <= fp_carp_ata;
+                            fp_carp_gir2 <= data_out_rom_t;
                             gec <= gec + 1;
                         end else begin
                             gec <= 0;
@@ -740,44 +771,29 @@ input clk_i,rst_i,en_i,
                     32:begin   // 32 
                         if(satir_sonuc1 < 64)begin
                             addr_ram_sonuc1 <= satir_sonuc1;
-                            durum <= 33;
+                            durum <= 34;// 33;
                         end else begin
                             satir_sonuc1 <= 0;
-                            en_topla <= 0;
+//                            en_topla <= 0;
                             // ram_toplam degeri bir ram e yazılacak
                             durum <= 36;
                         end
                     end
                     
-                    33:begin
-                        if(gec < 3)begin
-                            gec <= gec + 1;
-                        end else begin
-                            gec <= 0;
-                            fp_topla_gir1 <= ram_toplam;
-                            fp_topla_gir2 <= data_out_ram_sonuc1;
-                            en_topla <= 1;
-                            durum <= 34;
-                        end
-                    end
                     
                     34:begin
-                        if(gec < 16)begin
+                        if(gec < 15)begin // BÖYLE KALMALI
+                            fp_topla_gir1 <= ram_toplam;
+                            fp_topla_gir2 <= data_out_ram_sonuc1;
                             gec <= gec + 1;
                         end else begin
                             gec <= 0;
-                            fp_topla_ata <= fp_topla_cik;
-                            en_topla <= 0;
-                            durum <=  35; 
+                            ram_toplam <= fp_topla_cik;
+                            satir_sonuc1 <= satir_sonuc1 + 1;
+                            durum <=  32; //35; 
                         end
                     end 
-                    
-                    35:begin
-                        ram_toplam <= fp_topla_ata; 
-                        satir_sonuc1 <= satir_sonuc1 + 1;
-                        durum <= 32;
-                    end 
-                    
+                   
                     36:begin
                     // ram_toplam sonuc2 ramine yazılacak
                         if(satir_sonuc2 < 64)begin
@@ -797,31 +813,30 @@ input clk_i,rst_i,en_i,
                         cos_rom_say <= 0;
                         satir_cos <= 0;
                         if(satir_sonuc2 < 64)begin
-                            fp_topla_gir1 <= 32'b01000011000000000000000000000000;   // 128 ile toplar   
-                            fp_topla_gir2 <= toplam1_sonucu_ram[satir_sonuc2];   
-                            en_topla <= 1;
                             durum <= 38;                          
                         end else begin 
                             // integer donusume
                             satir_sonuc2 <= 0; 
-                            en_topla <= 0;
                             durum <= 40;
                         end
                     end 
+                 
                     
+                    // IP CORE  toplama modulumuze gore 
                     38:begin
-                        if(gec < 16)begin
+                        if(gec < 15)begin // BÖYLE KALMALI
+                            fp_topla_gir1 <= 32'b01000011000000000000000000000000;   // 128 ile toplar   
+                            fp_topla_gir2 <= toplam1_sonucu_ram[satir_sonuc2]; 
                             gec <= gec + 1;
                         end else begin
                             gec <= 0;
                             fp_topla_ata <= fp_topla_cik;
-                            en_topla <= 0;
+//                            en_topla <= 0;
                             durum <= 39; 
                         end
                     end 
                     
                     39:begin
-                        
                         if(fp_topla_ata > 32'b01000011011111110000000000000000)begin
                              toplam2_sonucu_ram[satir_sonuc2] <= 32'b01000011011111110000000000000000;
                              satir_sonuc2 <= satir_sonuc2 + 1;
@@ -850,12 +865,14 @@ input clk_i,rst_i,en_i,
                             en_ram_sonuc <= 1;         
                             we_ram_sonuc <= 0; // okuma // modül pasif
                             addr_ram_sonuc <= 0;
+                            addr_ram_fp <= 0;
+                            addr_ram_sonuc1 <= 0;
                             durum <= 43; // 45 OKUMA
                         end
                     end
                     
                     41:begin
-                        if(gec < 15)begin
+                        if(gec < 15)begin // BÖYLE KALMALI
                             gec = gec + 1;
                         end else begin
                             gec <= 0;
@@ -870,24 +887,16 @@ input clk_i,rst_i,en_i,
                     
                     42:begin
                         data_in_ram_sonuc <= fp_int_ata;
-                        //sonuc_ram[sonuc_satir] <= fp_int_ata;
                         sonuc_satir <= sonuc_satir + 1;
                         durum <= 40;
                     end
-                    /*
-                    // RAMDEKI VERILER OKUMA
-                    45:begin
-                        decode_durum <= durum;
-                        addr_ram_sonuc <= satir_oku; 
-                        decoded<= data_out_ram_sonuc;;
-                    end 
-                    */
+               
                     43:begin
                         if(sonuc_satir < 65)begin 
                             en_ram_sonuc <= 1;
                             we_ram_sonuc <= 0; // okuma
                             addr_ram_sonuc <= sonuc_satir; 
-                            // sonuc_ram[sonuc_satir] <= 8'bxxxxxxxx; // sıfırlamak icin verileri 
+                            addr_ram_sonuc1 <= sonuc_satir; 
                             durum <= 44;
                         end else begin
                             sonuc_satir <= 0;
@@ -900,7 +909,6 @@ input clk_i,rst_i,en_i,
                         if(gec < 1)begin
                             gec <= gec +1;
                             decoded <= data_out_ram_sonuc;
-                            //decoded <= sonuc_ram[sonuc_satir];
                         end else begin
                             gec <= 0;
                             sonuc_satir <= sonuc_satir + 1; 
@@ -954,7 +962,7 @@ input clk_i,rst_i,en_i,
         .rst_i(rst_i),
         .en_i(en_ac),
         .encoded_veri_i(encoded_veri_i_ac),
-        .ac_deger_o(ac_deger_ac),
+//        .ac_deger_o(ac_deger_ac),
         .asil_deger_o(asil_deger_ac),
         .encoded_veri_o(encoded_veri_o_ac),
         .sagdaki_sifir_sayisi_o(sagdaki_sifir_sayisi_ac),
@@ -968,7 +976,7 @@ input clk_i,rst_i,en_i,
         .rst_i(rst_i),
         .en_i(en_dc),
         .encoded_veri_i(encoded_veri_i_dc),
-        .dc_deger_o(dc_deger_dc),
+//        .dc_deger_o(dc_deger_dc),
         .asil_deger_o(asil_deger_dc),
         .encoded_veri_o(encoded_veri_o_dc),
         .sagdaki_sifir_sayisi_o(sagdaki_sifir_sayisi_dc)
@@ -1013,16 +1021,22 @@ input clk_i,rst_i,en_i,
         .data_i(data_in_ram_fp),
         .data_o(data_out_ram_fp)
     );
+   
+    floating_point_multiply FP_CARPMA(
+        .aclk                  (clk_i),
+        .s_axis_a_tvalid       (a_tvalid_carp),
+        .s_axis_a_tready       (a_tready_carp),
+        .s_axis_a_tdata        (fp_carp_gir1),
+        .s_axis_b_tvalid       (b_tvalid_carp),
+        .s_axis_b_tready       (b_tready_carp),
+        .s_axis_b_tdata        (fp_carp_gir2),
+        .m_axis_result_tvalid  (tvalid_r_carp),
+        .m_axis_result_tready  (tready_r_carp),
+        .m_axis_result_tdata   (fp_carp_cik)
+    );
     
-    // floating point çarpma 
-    fp_carpma fp_carp(
-        .clk_i(clk_i),
-        .rst_i(rst_i),
-        .en_i(en_carp),
-        .x1_i(fp_carp_gir1),
-        .x2_i(fp_carp_gir2),
-        .sonuc_o(fp_carp_cik)
-        );
+    
+    
     
     
     // cos ayrık degerler icin rom
@@ -1053,19 +1067,22 @@ input clk_i,rst_i,en_i,
         .data_o(data_out_rom_t)
     );
     
+    floating_point_add fp_toplama(
+        .aclk(clk_i),
+        .s_axis_a_tvalid(a_tvalid),
+        .s_axis_a_tready(a_tready),
+        .s_axis_a_tdata(fp_topla_gir1),
+        .s_axis_b_tvalid(b_tvalid),
+        .s_axis_b_tready(b_tready),
+        .s_axis_b_tdata(fp_topla_gir2),
+        .m_axis_result_tvalid(tvalid_r),
+        .m_axis_result_tready(tready_r),
+        .m_axis_result_tdata(fp_topla_cik)
+    
+    );
+    
+
   
-    
-    // floating point toplama 
-    fp_toplama#(.b(32),.e(8),.m(23)) fp_topla(
-        .clk_i(clk_i),
-        .rst_i(rst_i),
-        .en_i(en_topla),
-        .g1_i(fp_topla_gir1),
-        .g2_i(fp_topla_gir2),
-        .toplam_o(fp_topla_cik)
-        );
-        
-    
     
     // fp -> integer a donusum icin
     fp_int_donusum fp_int_donus(
@@ -1088,3 +1105,4 @@ input clk_i,rst_i,en_i,
     
     
 endmodule
+

@@ -19,7 +19,7 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module gauss (  
+module gauss1 (  
     input       clk_i_g,rst_i_g,
     input       en_i_g, 
     input [7:0] data_i_0 , 
@@ -30,13 +30,13 @@ module gauss (
     input [7:0] data_i_5 ,
     input [7:0] data_i_6 ,
     input [7:0] data_i_7 ,
-    input [7:0] data_i_8 ,
+    input [7:0] data_i_8 , 
     output[7:0] data_o ,
     output sonuc_done
      );
     reg sonuc_done_g=0;
     reg [15:0] mult_data [0:8];
-    reg [15:0] mult_data_reg [0:8]; 
+    //reg [15:0] mult_data_reg [0:8]; 
     reg [7:0]  data_i_reg [0:8];
     reg [16:0] sum_data = 0 ;  
     reg [16:0] sum_data2 = 0 ;
@@ -60,12 +60,7 @@ module gauss (
        kernel_gaussian[8] = 8'b00000001 ;
     end
     always @ ( posedge clk_i_g) begin  
-        if(rst_i_g) begin 
-        sayac = 0;
-        i = 0;
-        g_sayac=0;
-        durum =0;
- 
+        if(!rst_i_g) begin 
         end else begin
            if(en_i_g==1) begin
             g_sayac=g_sayac+1;
@@ -104,46 +99,34 @@ module gauss (
                    
                   end
                 end
-                2:begin 
+
+                2:begin
                  if(sayac<9)begin
-                  mult_data_reg [i] = mult_data [i];
-                  sayac = sayac+1 ;
-                  i = i+1;
-                  durum=2;
-                 end
-                 else begin
-                  sayac = 0;
-                  i=0;
-                  durum=3;
-                 end
-                end
-                3:begin
-                 if(sayac<9)begin
-                 sum_data <= sum_data+ mult_data_reg[i];
+                 sum_data <= sum_data+ mult_data[i];
                  sayac = sayac+1;
                  i = i + 1;
-                 durum=3;
+                 durum=2;
                  end
                  else begin
-                  durum=4;
+                  durum=3;
                  
                  end
                 end
                 
-                4:begin
+                3:begin
                  sum_data2 <=sum_data2 + sum_data;
+                 durum=4;
+                end
+                4:begin
+                 sum_data2 <= sum_data2 >> 4; //sum_data2/16; 
                  durum=5;
                 end
                 5:begin
-                 sum_data2 <= sum_data2 >> 4; //sum_data2/16;
-                 durum=6;
-                end
-                6:begin
                  div_data <= sum_data2;
                  sonuc_done_g<=1;
-                 durum=7;
+                 durum=6;
                 end
-               7:begin
+               6:begin
                 i<=0;
                 sayac<=0;
                 sum_data2<=0;
@@ -155,17 +138,9 @@ module gauss (
                 mult_data [4]<=0;
                 mult_data [5]<=0;
                 mult_data [6]<=0;
-                mult_data [7]<=0;
+                mult_data [7]<=0; 
                 mult_data [8]<=0; 
-                mult_data_reg[0]<=0;
-                mult_data_reg[1]<=0;
-                mult_data_reg[2]<=0;
-                mult_data_reg[3]<=0;
-                mult_data_reg[4]<=0;
-                mult_data_reg[5]<=0;
-                mult_data_reg[6]<=0;
-                mult_data_reg[7]<=0;
-                mult_data_reg[8]<=0;
+       
                 data_i_reg[0]<=0;
                 data_i_reg[1]<=0;
                 data_i_reg[2]<=0;

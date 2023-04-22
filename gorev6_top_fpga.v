@@ -315,7 +315,7 @@ module gorev6_top_fpga
     
     gorev6 GOREV6(
     .clk_i(clk_i),
-    .rst_i(rstn_i),
+    .rst_i(rst_i),
     .en_i(en_gorev6),
     .veri_i(veri_i_gorev6),
     .veri_o(veri_o_gorev6),

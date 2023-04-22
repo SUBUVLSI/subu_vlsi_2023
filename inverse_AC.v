@@ -1,30 +1,9 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 15.01.2023 15:16:58
-// Design Name: 
-// Module Name: inverse_AC
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
-
 module inverse_AC(
     input clk_i,rst_i, en_i,
     input [31:0] encoded_veri_i, // 100001 // 1111011 0111010110100101111000000
     output [31:0] encoded_veri_o,
-    output [17:0] ac_deger_o,
+//    output [17:0] ac_deger_o,
     output [10:0] asil_deger_o,
     output [4:0] sagdaki_sifir_sayisi_o, // max 20 olabilir
     output [4:0] ondeki_sifir_sayisi_o, // asil sayi onundeki 0 sayisi / ramde asil sayi onune yazilacak  
@@ -45,7 +24,7 @@ module inverse_AC(
     assign ondeki_sifir_sayisi_o = cikis_sifir_deger;
     assign eob_kontrol_o = eob_kontrol_oku;
     assign encoded_veri_o = encoded_veri_cikti;
-    assign ac_deger_o = ram_deger0;
+//    assign ac_deger_o = ram_deger0;
     assign asil_deger_o = ram_deger_asil;
     
     // genel degiskenler
@@ -245,13 +224,13 @@ module inverse_AC(
                                 durum = 13; // geldigi yerden bir sonraki yere / 12->13
                             end
                             else if(ac_deger6 == 6'b111011)begin
-                                cikis_sifir = 4'b0100; // 4
+                                cikis_sifir = 5'b00100; // 4
                                 cikis_deger = 4'b0001; // 1
                                 ram_deger0 = 6'b111011; // ramin ilk satırına ac_degeri yazilir
                                 durum = 13; // geldigi yerden bir sonraki yere / 12->13
                             end
                             else begin
-                                cikis_sifir = 4'bxxxx; // tanımsız
+                               cikis_sifir = 4'bxxxx; // tanımsız
                                 cikis_deger = 4'bxxx; // tanımsız
                                 en_r6 = 0; 
                                 en_r7 = 1; 
@@ -2187,24 +2166,21 @@ module inverse_AC(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r1),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),       
         .cekilen_veri_o(ara_deger1) // bu dc nin girişi, ac nin  girişi veya ram e yazılacak sayi olacak
     );
     rotate_left #(.kaydir(2)) rotate_left2(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r2),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),       
         .cekilen_veri_o(ara_deger2)
     );
     rotate_left #(.kaydir(3)) rotate_left3(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r3),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),       
         .cekilen_veri_o(ara_deger3)
     );
     
@@ -2212,8 +2188,7 @@ module inverse_AC(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r4),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),        
         .cekilen_veri_o(ara_deger4)
     );
     rotate_left #(.kaydir(5)) rotate_left5(
@@ -2221,39 +2196,34 @@ module inverse_AC(
         .rst_i(rst_i),
         .en_i(en_r5),
         .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
         .cekilen_veri_o(ara_deger5)
     );
     rotate_left #(.kaydir(6)) rotate_left6(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r6),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),         
         .cekilen_veri_o(ara_deger6)
     );
     rotate_left #(.kaydir(7)) rotate_left7(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r7),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),        
         .cekilen_veri_o(ara_deger7)
     );
     rotate_left #(.kaydir(8)) rotate_left8(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r8),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),        
         .cekilen_veri_o(ara_deger8)
     );
     rotate_left #(.kaydir(9)) rotate_left9(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r9),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),       
         .cekilen_veri_o(ara_deger9)
     );
     
@@ -2261,56 +2231,49 @@ module inverse_AC(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r10),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),        
         .cekilen_veri_o(ara_deger10)
     );
     rotate_left #(.kaydir(11)) rotate_left11(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r11),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),        
         .cekilen_veri_o(ara_deger11)
     );
     rotate_left #(.kaydir(12)) rotate_left12(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r12),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),        
         .cekilen_veri_o(ara_deger12)
     );
     rotate_left #(.kaydir(13)) rotate_left13(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r13),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),         
         .cekilen_veri_o(ara_deger13)
     );
     rotate_left #(.kaydir(14)) rotate_left14(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r14),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),         
         .cekilen_veri_o(ara_deger14)
     );
     rotate_left #(.kaydir(15)) rotate_left15(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r15),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),        
         .cekilen_veri_o(ara_deger15)
     );
     rotate_left #(.kaydir(16)) rotate_left16(
         .clk_i(clk_i),
         .rst_i(rst_i),
         .en_i(en_r16),
-        .sayi_i(sayi_r),          
-        .kaydirilmis_sayi_o(),
+        .sayi_i(sayi_r),        
         .cekilen_veri_o(ara_deger16)
     );
     

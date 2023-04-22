@@ -707,10 +707,10 @@ module top_modul(
         n=$fopen("D:\\vivado\\decode_cikti.txt","w"); 
       end
         initial begin
-              #331427390 // 1088571711
+              #330487390 
               for (m = 0; m<max_row; m=m+1) 
                   $fwrite(n,"%d\n",cikti_mem2[m]); 
-              #331427390 // 
+              #336187390 
               $fclose(n);
         end
     
@@ -721,10 +721,10 @@ module top_modul(
         y=$fopen("D:\\vivado\\düzenli_decode_cikti.txt","w"); 
       end
         initial begin
-              #1019427390 // 1088571711
+              #336187400 
               for (x = 0; x<max_row; x=x+1) 
                   $fwrite(y,"%d\n",cikti_mem2[x]); 
-              #1019657390 // 
+              #336187900
               $fclose(y);
         end
     
@@ -747,10 +747,10 @@ module top_modul(
         f=$fopen("D:\\vivado\\gorev_cikti.txt","w"); 
       end
         initial begin
-              #1020657390
+              #336189900
               for (j = 0; j<max_row; j=j+1) 
                   $fwrite(f,"%d\n",cikti_mem1[j]); 
-              #1020657490
+              #336190900
               $fclose(f);
         end
     

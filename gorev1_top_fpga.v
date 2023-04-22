@@ -332,7 +332,7 @@ module gorev1_top
 
     
     // 8 bitlik ram / 76800 satır
-    ramm#(.V(8),.S(76800),.A(17)) RAM1(
+    ram#(.V(8),.S(76800),.A(17)) RAM1(
         .clk_i(clk_i),
         .en_i(en_ram1),
         .we_i(we_ram1),
@@ -358,7 +358,7 @@ module gorev1_top
 
 
     // 8 bitlik ram / 76800 satır
-    ramm#(.V(8),.S(76800),.A(17)) RAM2(
+    ram#(.V(8),.S(76800),.A(17)) RAM2(
         .clk_i(clk_i),
         .en_i(en_ram2),
         .we_i(we_ram2),

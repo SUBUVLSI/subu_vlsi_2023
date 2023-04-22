@@ -326,7 +326,7 @@ module gorev1_top
     
     gorev1 GOREV1(
     .clk_i(clk_i),
-    .rst_i(rstn_i),
+    .rst_i(rst_i),
     .en_i(en_gorev1),
     .veri_i(veri_i_gorev1),
     .veri_o(veri_o_gorev1),

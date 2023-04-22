@@ -30,7 +30,7 @@ module top_modul(
     );
     
     
-    reg [6:0] durum = 0;
+    reg [6:0] durum = DECODE0;
     integer sayac = 0, gec = 0;
     
     

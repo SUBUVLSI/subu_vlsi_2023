@@ -63,7 +63,7 @@ module sobel1 (
    end
 
     always @ (posedge clk_i_s) begin  
-        if(!rst_i_s) begin 
+        if(rst_i_s) begin 
         sayac = 0;
         i = 0;
         

@@ -1,6 +1,5 @@
 `timescale 1ns / 1ps
 
-// max 11 kere shift rotate yapmamız lazım 
 // bu modül ile veri rotate shift işlemine sokulur ve sonuc üzerinden istediğimiz uzunluktaki veri çekilmiş olur.
 
 module rotate_left#(parameter kaydir=5)(
@@ -169,6 +168,7 @@ module rotate_left#(parameter kaydir=5)(
                     3:begin
                         durum = 0;
                         sayac = 0;
+                        
                     end
                 endcase
             end else begin
@@ -178,4 +178,3 @@ module rotate_left#(parameter kaydir=5)(
         end   
     end
 endmodule
-

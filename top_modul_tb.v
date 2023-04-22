@@ -1,4 +1,3 @@
-// CALISMIYOR SUAN
 
 `timescale 100ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
@@ -73,14 +72,14 @@ module top_modul(
     // GOREV 5
     reg veri_al;
     wire islem_bitti, veri_gonder;
-    wire veri_gonder4, veri_gonder5, veri_gonder6;
+    wire veri_gonder1, veri_gonder2, veri_gonder3, veri_gonder4, veri_gonder5, veri_gonder6;
     wire veri_al1, veri_al2, veri_al3, veri_al4, veri_al5, veri_al6;
     wire veri_al_his;
-    reg [15:0] en_gorev1, en_gorev2, en_gorev3, en_gorev4, en_gorev5, en_gorev6;
+    reg en_gorev1, en_gorev2, en_gorev3, en_gorev4, en_gorev5, en_gorev6;
     reg [7:0] veri_i_gorev;
     wire [7:0] veri_o_gorev;
     reg [31:0] veri_histogram;
-    wire islem_bitti4, islem_bitti5, islem_bitti6;
+    wire islem_bitti1, islem_bitti2, islem_bitti3, islem_bitti4, islem_bitti5, islem_bitti6;
     wire [31:0] veri_o_gorev4;
     
     reg [7:0] cikti_mem [0:max_row-1]; // decode
@@ -487,38 +486,37 @@ module top_modul(
                     5:begin
                         en_ram_htable = 1;
                         we_ram_htable = 0;
-//                      en_gorev <= 1;
                         en_ram1 = 1;
                         we_ram1 = 0; // okuma
                         addr_ram1 = 0;
                         addr_ram_htable <= 0;
                         if(en_gorev_i == 16'ha060)begin // gorev6
-                            en_gorev6 <= en_gorev_i; // 16'ha060; //
+                            en_gorev6 <= 1;
                             veri_al <= veri_al6;
                             durum <= VERI_GONDER_GOREV1;
                         end 
                          else if(en_gorev_i == 16'hA010)begin // gorev4
-                            en_gorev1 <= en_gorev_i;
+                            en_gorev1 <= 1;
                             veri_al <= veri_al1;
                             durum <= VERI_GONDER_GOREV1;
                         end
                         else if(en_gorev_i == 16'hA020)begin // gorev4
-                            en_gorev2 <= en_gorev_i;
+                            en_gorev2 <= 1;
                             veri_al <= veri_al2;
                             durum <= VERI_GONDER_GOREV1;
                         end
                         else if(en_gorev_i == 16'hA030)begin // gorev4
-                            en_gorev3 <= en_gorev_i;
+                            en_gorev3 <= 1;
                             veri_al <= veri_al3;
                             durum <= VERI_GONDER_GOREV1;
                         end
                         else if(en_gorev_i == 16'hA040)begin // gorev4
-                            en_gorev4 <= en_gorev_i;
+                            en_gorev4 <= 1;
                             veri_al <= veri_al4;
                             durum <= VERI_GONDER_GOREV1;
                         end
                         else if(en_gorev_i == 16'hA050)begin // gorev5
-                            en_gorev5 <= en_gorev_i;
+                            en_gorev5 <= 1;
                             veri_al <= veri_al5;
                             durum <= VERI_GONDER_HIS1;
                         end else begin
@@ -605,7 +603,7 @@ module top_modul(
                     
                      // ALT MODULDEN AL
                     VERI_AL_GOREV1:begin
-                        if(islem_bitti6 == 1 && veri_gonder6 == 1)begin
+                        if((islem_bitti6 == 1 && veri_gonder6 == 1) && (islem_bitti1 == 1 && veri_gonder1 == 1) && (islem_bitti3 == 1 && veri_gonder3 == 1))begin
                             durum <= VERI_AL_GOREV2;
                         end else begin
                             bit <= 1;
@@ -793,8 +791,8 @@ module top_modul(
     .veri_i(veri_i_gorev),                                                                                      
     .veri_o(veri_o_gorev),                                                                                      
     .veri_al_o(veri_al1),                                                                                         
-    .veri_gonder_o(veri_gonder),                                                                                 
-    .islem_bitti_o(islem_bitti));  
+    .veri_gonder_o(veri_gonder1),                                                                                 
+    .islem_bitti_o(islem_bitti1));  
     
     gorev2 GOREV2(                                                                                           
     .clk_i(clk_i),                                                                                               
@@ -803,8 +801,8 @@ module top_modul(
     .veri_i(veri_i_gorev),                                                                                      
     .veri_o(veri_o_gorev),                                                                                      
     .veri_al_o(veri_al2),                                                                                         
-    .veri_gonder_o(veri_gonder),                                                                                 
-    .islem_bitti_o(islem_bitti));
+    .veri_gonder_o(veri_gonder2),                                                                                 
+    .islem_bitti_o(islem_bitti2));
     
     gorev3 GOREV3(                                                                                                                                                              
     .clk_i(clk_i),                                                                                                                                                                  
@@ -813,8 +811,8 @@ module top_modul(
     .veri_i(veri_i_gorev),                                                                                                                                                         
     .veri_o(veri_o_gorev),                                                                                                                                                         
     .veri_al_o(veri_al3),                                                                                                                                                            
-    .veri_gonder_o(veri_gonder),                                                                                                                                                    
-    .islem_bitti_o(islem_bitti));  
+    .veri_gonder_o(veri_gonder3),                                                                                                                                                    
+    .islem_bitti_o(islem_bitti3));  
     
     gorev4 gorev4_htable(
     .clk_i(clk_i),
@@ -823,8 +821,8 @@ module top_modul(
     .veri_i(veri_i_gorev),
     .veri_o(veri_o_gorev4),
     .veri_al_o(veri_al4),   
-    .veri_gonder_o(veri_gonder),
-    .islem_bitti_o(islem_bitti));
+    .veri_gonder_o(veri_gonder4),
+    .islem_bitti_o(islem_bitti4));
     
     gorev5 gorev5_histogram_esit(
     .clk_i(clk_i),
@@ -835,8 +833,8 @@ module top_modul(
     .veri_al_o(veri_al5),  
     .veri_al_his_o(veri_al_his),
     .veri_histogram_i(veri_histogram), 
-    .veri_gonder_o(veri_gonder),
-    .islem_bitti_o(islem_bitti));
+    .veri_gonder_o(veri_gonder5),
+    .islem_bitti_o(islem_bitti5));
     
 
     gorev6 GOREV6(

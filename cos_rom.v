@@ -18,7 +18,7 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-// cos ayrik degerler icin olusturulan rom / doldurulacak
+
 module cos_rom(
     input wire clk_i,rst_i,rd_i,  // senkron calismasi icin 
     input wire [11:0] addr_i, // romdaki adres bilgisi / 4096 sat�r i�in 13 bit yeterli

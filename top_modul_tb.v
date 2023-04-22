@@ -1,3 +1,4 @@
+// CALISMIYOR SUAN
 
 `timescale 100ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
@@ -72,9 +73,10 @@ module top_modul(
     // GOREV 5
     reg veri_al;
     wire islem_bitti, veri_gonder;
-    wire veri_gonder4, veri_al4, veri_gonder5, veri_al5, veri_gonder6, veri_al6;
+    wire veri_gonder4, veri_gonder5, veri_gonder6;
+    wire veri_al1, veri_al2, veri_al3, veri_al4, veri_al5, veri_al6;
     wire veri_al_his;
-    reg [15:0] en_gorev4, en_gorev5, en_gorev6;
+    reg [15:0] en_gorev1, en_gorev2, en_gorev3, en_gorev4, en_gorev5, en_gorev6;
     reg [7:0] veri_i_gorev;
     wire [7:0] veri_o_gorev;
     reg [31:0] veri_histogram;
@@ -491,19 +493,35 @@ module top_modul(
                         addr_ram1 = 0;
                         addr_ram_htable <= 0;
                         if(en_gorev_i == 16'ha060)begin // gorev6
-                            en_gorev6 <= 16'ha060; // en_gorev_i;
+                            en_gorev6 <= en_gorev_i; // 16'ha060; //
                             veri_al <= veri_al6;
                             durum <= VERI_GONDER_GOREV1;
                         end 
-                        /*
-                        else if(en_gorev_i == 16'hA040)begin // gorev4
-                            en_gorev <= en_gorev_i;
+                         else if(en_gorev_i == 16'hA010)begin // gorev4
+                            en_gorev1 <= en_gorev_i;
+                            veri_al <= veri_al1;
                             durum <= VERI_GONDER_GOREV1;
-                        end 
+                        end
+                        else if(en_gorev_i == 16'hA020)begin // gorev4
+                            en_gorev2 <= en_gorev_i;
+                            veri_al <= veri_al2;
+                            durum <= VERI_GONDER_GOREV1;
+                        end
+                        else if(en_gorev_i == 16'hA030)begin // gorev4
+                            en_gorev3 <= en_gorev_i;
+                            veri_al <= veri_al3;
+                            durum <= VERI_GONDER_GOREV1;
+                        end
+                        else if(en_gorev_i == 16'hA040)begin // gorev4
+                            en_gorev4 <= en_gorev_i;
+                            veri_al <= veri_al4;
+                            durum <= VERI_GONDER_GOREV1;
+                        end
                         else if(en_gorev_i == 16'hA050)begin // gorev5
-                            en_gorev <= en_gorev_i;
+                            en_gorev5 <= en_gorev_i;
+                            veri_al <= veri_al5;
                             durum <= VERI_GONDER_HIS1;
-                        end */ else begin
+                        end else begin
                             bit <= 1;
                         end 
                         
@@ -688,13 +706,13 @@ module top_modul(
     
      initial begin 
         #77000
-        n=$fopen("D:\\vivado\\decode_cikti4.txt","w"); 
+        n=$fopen("D:\\vivado\\decode_cikti.txt","w"); 
       end
         initial begin
-              #1001427390 // 1088571711
+              #331427390 // 1088571711
               for (m = 0; m<max_row; m=m+1) 
                   $fwrite(n,"%d\n",cikti_mem2[m]); 
-              #1009457390 // 
+              #331427390 // 
               $fclose(n);
         end
     
@@ -702,7 +720,7 @@ module top_modul(
     
      initial begin 
         #77000
-        y=$fopen("D:\\vivado\\konv_cikti4.txt","w"); 
+        y=$fopen("D:\\vivado\\düzenli_decode_cikti.txt","w"); 
       end
         initial begin
               #1019427390 // 1088571711
@@ -728,7 +746,7 @@ module top_modul(
     */
     initial begin 
         #7700
-        f=$fopen("D:\\vivado\\gorev_cikti6.txt","w"); 
+        f=$fopen("D:\\vivado\\gorev_cikti.txt","w"); 
       end
         initial begin
               #1020657390
@@ -758,6 +776,45 @@ module top_modul(
         .data_i(data_i_ram_htable),
         .data_o(data_o_ram_htable)
     );
+    
+    decode DECODE(
+        .clk_i(clk_i),
+        .rst_i(rst_i),
+        .en_i(en_decode),
+        .encoded_i(data_encode),
+        .sonuc_o(data_gonderme_ok),
+        .decoded_o(data_decode),
+        .decode_et_o(decode_edildi));
+        
+    gorev1 GOREV1(                                                                                           
+    .clk_i(clk_i),                                                                                               
+    .rst_i(rst_i),                                                                                               
+    .en_i(en_gorev1),                                                                                            
+    .veri_i(veri_i_gorev),                                                                                      
+    .veri_o(veri_o_gorev),                                                                                      
+    .veri_al_o(veri_al1),                                                                                         
+    .veri_gonder_o(veri_gonder),                                                                                 
+    .islem_bitti_o(islem_bitti));  
+    
+    gorev2 GOREV2(                                                                                           
+    .clk_i(clk_i),                                                                                               
+    .rst_i(rst_i),                                                                                               
+    .en_i(en_gorev2),                                                                                            
+    .veri_i(veri_i_gorev),                                                                                      
+    .veri_o(veri_o_gorev),                                                                                      
+    .veri_al_o(veri_al2),                                                                                         
+    .veri_gonder_o(veri_gonder),                                                                                 
+    .islem_bitti_o(islem_bitti));
+    
+    gorev3 GOREV3(                                                                                                                                                              
+    .clk_i(clk_i),                                                                                                                                                                  
+    .rst_i(rst_i),                                                                                                                                                                  
+    .en_i(en_gorev3),                                                                                                                                                               
+    .veri_i(veri_i_gorev),                                                                                                                                                         
+    .veri_o(veri_o_gorev),                                                                                                                                                         
+    .veri_al_o(veri_al3),                                                                                                                                                            
+    .veri_gonder_o(veri_gonder),                                                                                                                                                    
+    .islem_bitti_o(islem_bitti));  
     
     gorev4 gorev4_htable(
     .clk_i(clk_i),
@@ -815,14 +872,7 @@ module top_modul(
     );
     
    
-    decode DECODE(
-        .clk_i(clk_i),
-        .rst_i(rst_i),
-        .en_i(en_decode),
-        .encoded_i(data_encode),
-        .sonuc_o(data_gonderme_ok),
-        .decoded_o(data_decode),
-        .decode_et_o(decode_edildi));
+    
         
     // 8 bitlik ram / 76800 satır
     ram#(.V(8),.S(76800),.A(17)) decoded_ram(

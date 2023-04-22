@@ -31,7 +31,7 @@ module median(
     input [7:0]data_i_6,
     input [7:0]data_i_7,
     input [7:0]data_i_8,
-    output [7:0] data_o,
+    output [7:0] data_o, 
     output sonuc_done
     );
     reg sonuc_done_m=0;

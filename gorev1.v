@@ -118,7 +118,7 @@ module gorev1(
    reg [17:0] ic_sayac=0;
     
    always@(posedge clk_i)begin
-        if(!rst_i)begin
+        if(rst_i)begin
             g_sayac<=0;
         end else begin
             if(en_i==1)begin

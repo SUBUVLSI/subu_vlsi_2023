@@ -1,23 +1,4 @@
 `timescale 100ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 16.02.2023 15:17:46
-// Design Name: 
-// Module Name: gorev3
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
 
 module gorev3(
     input clk_i,  
@@ -97,8 +78,6 @@ module gorev3(
   parameter deger2=75684;
   reg [7:0] core_ram_out[0:8];
   reg [7:0] durum=0;
-
-
 
   integer ind=0,ram1_ind=0;
   reg[17:0] ind_m=0;
@@ -184,7 +163,7 @@ always @(posedge clk_i) begin
                     addr_ram2<=ram2_ind;                                             
                     durum <= 5;           
                 end else begin
-                
+             
                     addr_ram2<=ram2_ind;
                     indis<=0;                 
                     durum<=33; 
@@ -370,10 +349,7 @@ always @(posedge clk_i) begin
                     ram2_ind<=ram2_ind+1;
                     durum<=4;
                end
-               //19:begin
-               //    addr_ram2<=ram2_ind;
-               //    durum<=4;
-               //end
+             
                19:begin
                    durum_oku<=durum;
                    en_ram2=1;
@@ -382,7 +358,7 @@ always @(posedge clk_i) begin
                    durum<=30;   
                end
                30:begin
-                  if(gec<3)begin
+                  if(gec<1)begin
                     gec<=gec+1;
                     ram2_ind<=ram2_ind+1;
                     durum<=31;

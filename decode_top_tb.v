@@ -19,9 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-// verıyı alt module yanlıs gonderıyor 
-// sadece 1 kez alt modulden verı okuyabılıyor
-
 module decode_top(
 input clk_i,rst_i,en_i,
     output reg son

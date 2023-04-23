@@ -60,7 +60,7 @@ module gauss1 (
        kernel_gaussian[8] = 8'b00000001 ;
     end
     always @ ( posedge clk_i_g) begin  
-        if(rst_i_g) begin 
+        if(!rst_i_g) begin 
         end else begin
            if(en_i_g==1) begin
             g_sayac=g_sayac+1;

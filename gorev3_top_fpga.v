@@ -1,5 +1,6 @@
 `timescale 100ns / 1ps
 
+
 module gorev3_top
     #(
 //        parameter c_clkfreq = 100000000,
@@ -92,7 +93,8 @@ module gorev3_top
             if(en_i)begin
                 sayac <= sayac + 1;
                 case(durum)
- 
+
+                    
                     
                      0:   begin
                               UART_Kontrol_Yazmaci_tx_Active  <= 1'b0;
@@ -310,11 +312,10 @@ module gorev3_top
         end 
     end 
     
-
     
     
     
-    // 8 bitlik ram / 76800 satır
+    // 8 bitlik ram / 76800 satÄ±r
     ram#(.V(8),.S(76800),.A(17)) RAM1(
         .clk_i(clk_i),
         .en_i(en_ram1),
@@ -340,7 +341,7 @@ module gorev3_top
     
 
 
-    // 8 bitlik ram / 76800 satır
+    // 8 bitlik ram / 76800 satÄ±r
     ram#(.V(8),.S(76800),.A(17)) RAM2(
         .clk_i(clk_i),
         .en_i(en_ram2),
@@ -351,7 +352,6 @@ module gorev3_top
     );
     
 
-    
     uart_rx_top uart_rx(
       .clk_i                            (clk_i),
       .rstn_i                           (rstn_i),

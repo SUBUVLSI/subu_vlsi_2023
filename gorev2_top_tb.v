@@ -212,7 +212,7 @@ module gorev2_top_tb(
     );
     
     
-    gorev_2 GOREV2( 
+    gorev2 GOREV2( 
     .clk_i(clk_i),
     .rst_i(rst_i),
     .en_i(en_gorev2),

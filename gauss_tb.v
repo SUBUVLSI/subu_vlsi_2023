@@ -39,7 +39,7 @@ module gauss_test(
 
 
 
-    gauss_2 gauss(
+    gauss1 gauss(
         .clk_i_g(clk_i),
         .rst_i_g(rst_i),
         .data_i_0(data_i0_g) ,

@@ -1,6 +1,23 @@
 `timescale 1ns / 1ps
-
-
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 31.03.2023 14:58:30
+// Design Name: 
+// Module Name: gorev6
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
 
 module gorev6(
     input clk_i,rst_i,en_i,
@@ -89,7 +106,7 @@ module gorev6(
     
     
     always@(posedge clk_i)begin
-        if(rst_i)begin
+        if(!rst_i)begin
         end else begin
             if(en_i == 1)begin
                 sayac <= sayac + 1;

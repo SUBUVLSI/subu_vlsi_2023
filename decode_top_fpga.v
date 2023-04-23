@@ -1,6 +1,5 @@
 `timescale 1ns / 1ps
 
-
 module decode_top
     #(
         c_clkfreq    = 100_000_000,
@@ -25,7 +24,7 @@ module decode_top
 //    integer sayac = 0;
     integer gec = 0;
     
-
+   
     
     // ENCODED VERI ICIN RAM
     integer encoded_satir = 0;
@@ -72,7 +71,6 @@ module decode_top
     
     
     
-//    reg [7:0] cikti_mem[0:cikti_mem_satir]; // cikti
     
     
     reg [31:0] databuffer = 0;
@@ -91,6 +89,8 @@ module decode_top
     // ENODED RESIM RAM
     reg [1:0] addr_res_veri = 0; // 76800 tane veri  [3:0] / 4
     reg we_res , en_res;
+//    reg [63:0] in_res;
+//    wire [63:0] out_res;
     reg [31:0] in_res;
     wire [31:0] out_res;
     
@@ -217,13 +217,13 @@ module decode_top
                         end
                     end 
                     
-                    // 4. VERIYI CEKEMIYOR / DATA DEGISMIYOR // DURUM 4 E GITMIYOR
                     5:begin
                         // decode alt modülünden yeni veri icin sinyal bekleniyor
                         if(data_gonderme_ok == 1)begin // BU SINYAL DEGISMIYOR 
                             durum <= 4;
                         end
                         
+//                    
                         
                         // 64 lük veri decode edildi konvolüsyona gondermek icin ram e gidiyor 
                         else if(decode_edildi == 1)begin 
@@ -244,7 +244,7 @@ module decode_top
                     end
                     
                     6:begin
-                        if(satir_son_ram < 63)begin // maxrow
+                        if(satir_son_ram < max_row)begin // 63
                             durum <= 10;
                         end else begin
                             satir_son_ram <= 0;
@@ -257,6 +257,7 @@ module decode_top
                             en_decoded = 1;
                             we_decoded = 1; // yazma 
                             decode_veri[satir] <= data_decode;
+//                      
                             in_decoded <= data_decode; // satir_son_ram; 
                             satir <= satir + 1; 
                             satir_son_ram <= satir_son_ram + 1;
@@ -276,61 +277,57 @@ module decode_top
                             durum               <= 17;
                         end
                     end
-                    
-                    17:begin
-                         if(i_renable) begin
-                            led_rx <= 1'b0;
-                            
-                            case(drm) 
-                            
-                                0:  begin
-                                            we_ram_htable <= 1'b0; 
-                                            en_ram_htable <= 1'b1;
-                                            drm <= 4'b0100;
-                                    end
-                                    
-                                4: begin
-                                    
-                                    data_reg <= data_o_ram_htable;
-                                    addr_ram_htable <= addr_ram_htable +1;
-                                    cntr <= cntr +1;
-                                    drm <= 4'b0001;
-                                    
-                                end
+             
+                  
+            17:
+                begin
+                        
+                        case (drm)
+                        
+                        0:  begin
+                                we_decoded          <= 1'b0;
+                                en_decoded          <= 1'b1;
                                 
-                                1:  begin
-                                        
-                                        if(buffer_segment2 == 4) begin
-                                                buffer_segment2 <= 0;
-                                                
-                                                if(cntr > 63) begin // 255
-                                                    drm <= 4'b0011;
-                                                end else begin
-                                                    drm <= 4'b0000;
-                                                end
-                                        end else begin 
-                                             {i_Tx_Byte,shift_reg2[23:0]} <= data_reg;   
-                                             drm = 4'b0010;
-                                        end
-                                      end   
-                                 
-                                 2: begin
-                                     // 1111_2222_3333_4444
-                                            i_Tx_start <= 1'b1;
-                                          if(o_Tx_Done) begin            
-                                                        // 2222_3333_4444_0000   
-                                              buffer_segment2 <= buffer_segment2 +1;
-                                              data_reg <= shift_reg2 << 8;
-                                              drm <= 4'b0001;
-                                          end
-                                end 
-                                3: begin
-                                    i_Tx_start <= 1'b0;
-                                    led_tx <= 1'b0;
+                                drm                 <= 4'b0011;
+                            end
+                            
+                        1:  begin
+                                if(cntr < max_row) begin // 64
+                                    i_Tx_start  <= 1'b1;
+                                    i_Tx_Byte   <= out_decoded;
+                                    drm         <= 4'b0100;
+                                    
+                                end else begin
+                                    i_Tx_start          <= 0;
+                                    en_decoded          <= 1'b0;
+                                    we_decoded          <= 1'b0;
+                                    addr_decoded_veri   <= 0;
+                                    durum               <= 0;
+                                    led_tx              <= 0;
                                 end
-                            endcase
-                        end
-                    end 
+                            end    
+                                
+                        2:  begin
+                                    i_Tx_start          <= 1'b0;  
+                                    cntr                <= cntr +1;  
+                                    drm                 <= 4'b0001;    
+                            end  
+                            
+                        3:  begin
+                                drm <= 4'b0001;
+                            end
+                            
+                        4:  begin
+                                i_Tx_start <= 0;
+                                if(o_Tx_Done) begin
+                                    addr_decoded_veri   <= addr_decoded_veri + 1; 
+                                    drm     <= 4'b0010;
+                               end 
+                            end
+                            
+                      endcase
+                      
+                    end
                     
                    
                 endcase
@@ -338,6 +335,10 @@ module decode_top
         end
         
     end
+    
+    
+    
+
 
     
     // 32 bitlik ram / 2405 satır // 13

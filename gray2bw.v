@@ -23,7 +23,7 @@
 module gray2bw(
     input clk_i,rst_i,en_i,
     input [7:0] veri_i,
-    input [7:0] treshold_degeri,
+    input [7:0] treshold_degeri_i,
     output [7:0] veri_o
     
     );
@@ -34,14 +34,14 @@ module gray2bw(
     reg [7:0] treshold, veri, cikti;
     assign veri_o = cikti;
     always@(posedge clk_i)begin
-        if(rst_i)begin
+        if(!rst_i)begin
         end else begin
             if(en_i)begin
                 sayac <= sayac + 1;
                 case(durum) 
                     0:begin
                         if(sayac <= 2)begin
-                            treshold <= treshold_degeri;
+                            treshold <= treshold_degeri_i;
                             veri <= veri_i;
                         end else begin
                             durum <= 1;

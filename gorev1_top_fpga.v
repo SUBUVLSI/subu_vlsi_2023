@@ -1,8 +1,7 @@
 `timescale 100ns / 1ps
 
 
-
-module gorev1_top
+module gorev1_top_fpga
     #(
 //        parameter c_clkfreq = 100000000,
 //        parameter c_baudrate = 115200,
@@ -41,7 +40,7 @@ module gorev1_top
     
     
     reg [17:0] ic_sayac=0;
-    
+
 
     wire veri_gonder, veri_al;
     reg en_gorev1; 
@@ -93,7 +92,7 @@ module gorev1_top
             if(en_i)begin
                 sayac <= sayac + 1;
                 case(durum)
-
+        
                     
                      0:   begin
                               UART_Kontrol_Yazmaci_tx_Active  <= 1'b0;
@@ -310,8 +309,7 @@ module gorev1_top
             end
         end 
     end 
-    
-
+  
     
     // 8 bitlik ram / 76800 satır
     ram#(.V(8),.S(76800),.A(17)) RAM1(
@@ -326,7 +324,7 @@ module gorev1_top
     
     gorev1 GOREV1(
     .clk_i(clk_i),
-    .rst_i(rst_i),
+    .rst_i(rstn_i),
     .en_i(en_gorev1),
     .veri_i(veri_i_gorev1),
     .veri_o(veri_o_gorev1),

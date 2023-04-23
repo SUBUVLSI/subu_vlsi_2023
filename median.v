@@ -170,4 +170,3 @@ module median(
     assign data_o=data_o_m;
     assign sonuc_done=sonuc_done_m;
 endmodule
-

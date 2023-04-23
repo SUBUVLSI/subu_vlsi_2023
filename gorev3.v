@@ -1,5 +1,6 @@
 `timescale 100ns / 1ps
 
+
 module gorev3(
     input clk_i,  
     input rst_i,
@@ -14,7 +15,7 @@ module gorev3(
     output [16:0] indis_kontrol
 );
 
-// median alt modül
+// median alt modÃ¼l
   reg en_m; 
   reg [7:0] data_i0_m ;
   reg [7:0] data_i1_m ;
@@ -78,6 +79,8 @@ module gorev3(
   parameter deger2=75684;
   reg [7:0] core_ram_out[0:8];
   reg [7:0] durum=0;
+  //reg islem_bitti;
+  //assign islem_bitti_o = islem_bitti;
 
   integer ind=0,ram1_ind=0;
   reg[17:0] ind_m=0;
@@ -109,7 +112,7 @@ always @(posedge clk_i) begin
                     ram1_ind<=0;
                     addr_ram2<=0;
                     addr_ram1<=0;
-                    durum<=25;// konvolüsyona git.
+                    durum<=25;// konvolÃ¼syona git.
                 end
             end
    
@@ -123,7 +126,7 @@ always @(posedge clk_i) begin
                      //durum<=55;
                 end else begin 
                      gec<=0;                      
-                     durum<=2;// indis arttır.
+                     durum<=2;// indis arttÄ±r.
                 end 
              end
 
@@ -145,9 +148,7 @@ always @(posedge clk_i) begin
                    ram2_ind<=ram2_ind+1;
                    durum<=26;                           
                end else begin
-                   //ram2_ind<=ram2_ind+1;
-                   //addr_ram2<=0;               
-                   //en_ram2 <= 0;                
+                      
                    addr_ram1<=0;                                     
                    durum <= 4;
                    
@@ -163,13 +164,13 @@ always @(posedge clk_i) begin
                     addr_ram2<=ram2_ind;                                             
                     durum <= 5;           
                 end else begin
-             
+   
                     addr_ram2<=ram2_ind;
                     indis<=0;                 
                     durum<=33; 
                 end
              end
-             5:begin //konvolüsyon
+             5:begin //konvolÃ¼syon
                 durum_oku<=durum;
                 addr_ram1<=ind_m;
                 if(gec<=5)begin
@@ -332,12 +333,7 @@ always @(posedge clk_i) begin
                    durum_oku<=durum;
                    en_ram2=1;
                    we_ram2=1;
-                   data_i_ram2<=data_o_m;                   
-                   //ind_m<=ind_m+1;
-                   //ind<=ind+1;
-                   //en_m<=0;
-                   //indis<=indis+1; 
-                   //ram1_ind<=ram1_ind+1;
+                   data_i_ram2<=data_o_m;         
                    durum<=18;                            
                end
                18:begin
@@ -349,7 +345,6 @@ always @(posedge clk_i) begin
                     ram2_ind<=ram2_ind+1;
                     durum<=4;
                end
-             
                19:begin
                    durum_oku<=durum;
                    en_ram2=1;
@@ -457,7 +452,7 @@ always @(posedge clk_i) begin
       end
      end
    end
-  // 8 bitlik ram / 76800 satır
+  // 8 bitlik ram / 76800 satÄ±r
     ram#(.V(8),.S(76800),.A(17)) RAM1_ALT(
         .clk_i(clk_i),
         .en_i(en_ram2),
@@ -466,7 +461,7 @@ always @(posedge clk_i) begin
         .data_i(data_i_ram2),
         .data_o(data_o_ram2)
     );
-      // 8 bitlik ram / 75684 satır
+      // 8 bitlik ram / 75684 satÄ±r
     ram#(.V(8),.S(76800),.A(17)) RAM2_ALT(
         .clk_i(clk_i),
         .en_i(en_ram1),

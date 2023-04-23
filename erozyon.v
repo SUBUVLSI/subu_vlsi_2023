@@ -35,7 +35,7 @@ module erozyon(
     assign veri_o = cikti;
     
     always@(posedge clk_i)begin
-        if(rst_i)begin
+        if(!rst_i)begin
         end else begin
             if(en_i)begin
                 sayac <= sayac + 1;

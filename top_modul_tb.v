@@ -1,5 +1,24 @@
 
 `timescale 100ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 13.04.2023 21:06:03
+// Design Name: 
+// Module Name: top_modul
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
 
 
 module top_modul(
@@ -73,10 +92,10 @@ module top_modul(
         $readmemb("D:\\vivado\\histogram_table.txt",mem1);  
     end
     
-    reg [7:0] memmm [0:max_row-1];
-    initial begin
-        $readmemb("D:\\vivado\\asil_resim.txt",memmm);  
-    end
+//    reg [7:0] memmm [0:max_row-1];
+//    initial begin
+//        $readmemb("D:\\vivado\\asil_resim.txt",memmm);  
+//    end
     
     integer ind = 0, indis = 0;
 
@@ -174,22 +193,18 @@ module top_modul(
                         durum <= DECODE1;
                     end 
                     DECODE1:begin 
-                        if(ind <= max_row /*mem_satir*/)begin 
+                        if(ind <= mem_satir)begin 
                             en_encoded <= 1;
                             we_encoded <= 1;
                             addr_encoded_veri <= ind;
-                            en_ram1 <= 1;
-                            we_ram1 <= 1;
-                            addr_ram1 <= ind;
                             durum <= DECODE2;
                         end else begin
                             //addr_encoded_veri = 0;
                             ind = 0;
-                            durum = 5; // DECODE3;
+                            durum = DECODE3;
                         end
                     end 
                     DECODE2:begin
-                        data_i_ram1 <= memmm[ind];
                         in_encoded <= mem[ind]; //yazacağı veri zaten 8 bit direkt tek satıra aktanır
                         ind <= ind + 1;  // bir sonraki clockta artacak
                         durum <= DECODE1;
@@ -279,8 +294,6 @@ module top_modul(
                     end
                     
                     DECODE_SON:begin
-                        // 981427390
-                       
                         addr_decoded_veri <= 0; 
                         durum <= YERLESTIR1;
                         indis <= 0;
@@ -609,6 +622,173 @@ module top_modul(
                         son_o <= 1;
                     end 
                     
+                    /*
+                    // HISTOGRAM ALT MODULE GONDER // GOREV5 ICIN
+                    VERI_GONDER_HIS1:begin
+                        if(veri_al_his == 1 && ind < 256)begin
+                            durum <= VERI_GONDER_HIS2;
+                        end else begin
+                            ind <= 0;
+//                            en_ram1 = 1;
+//                            we_ram1 = 0; // okuma
+                            addr_ram1 = 0;
+                            durum <= VERI_GONDER_GOREV1;
+                        end
+                    end      
+                    VERI_GONDER_HIS2:begin
+                        if(gec < 3)begin  // 3
+                            gec <= gec + 1;
+                            veri_histogram <= data_o_ram_htable;
+                        end else begin
+                            ind <= ind + 1;
+                            gec <= 0;
+                            durum <= VERI_GONDER_HIS3;
+                        end
+                    end 
+                    
+                    VERI_GONDER_HIS3:begin
+                        addr_ram_htable <= ind;
+                        durum <= VERI_GONDER_HIS1;
+                    end
+                    
+                    // ASIL VERI ALT MODULE GONDER // DIGER GOREVLER ICIN
+                    
+                    VERI_GONDER_GOREV1:begin
+                        if(veri_al == 1 && ind < max_row)begin
+                            durum <= VERI_GONDER_GOREV2;
+                        end else begin
+                            ind <= 0;
+                            en_ram2 = 1;
+                            we_ram2 = 1;
+                            addr_ram2 = 0;
+                            durum <= VERI_AL_GOREV1;
+                        end
+                    end 
+                    VERI_GONDER_GOREV2:begin
+                        durum <= VERI_GONDER_GOREV3;
+                    end 
+                    VERI_GONDER_GOREV3:begin
+                        if(en_gorev_i == 16'ha060)begin // gorev6
+                            if(gec <11)begin 
+                               gec <= gec + 1;
+                               en_ram1 = 1;
+                               we_ram1 = 0; // okuma
+                               veri_i_gorev <= data_o_ram1;
+                            end else begin
+                               ind <= ind + 1;
+                               gec <= 0;
+                               durum <= VERI_GONDER_GOREV4;
+                            end 
+                        end else begin // gorev4
+                            if(gec < 4)begin  // 3
+                                gec <= gec + 1;
+                                en_ram1 = 1;
+                                we_ram1 = 0; // okuma
+                                veri_i_gorev <= data_o_ram1;
+                            end else begin
+                                ind <= ind + 1;
+                                gec <= 0;
+                                durum <= VERI_GONDER_GOREV4;
+                            end
+                        end 
+                    end
+                    VERI_GONDER_GOREV4:begin
+                        addr_ram1 <= ind;
+                        durum <= VERI_GONDER_GOREV1;
+                    end
+                    
+                     // ALT MODULDEN AL
+                    VERI_AL_GOREV1:begin
+                        if((islem_bitti6 == 1 && veri_gonder6 == 1) || (islem_bitti1 == 1 && veri_gonder1 == 1) || (islem_bitti3 == 1 && veri_gonder3 == 1))begin
+                            durum <= VERI_AL_GOREV2;
+                        end else begin
+                            bit <= 1;
+                        end 
+                    end
+                    
+                    VERI_AL_GOREV2:begin
+                        if(en_gorev_i == 16'hA040 && indis < 256)begin // gorev4
+                            durum <= VERI_AL_GOREV3;
+                        end 
+                        else if(en_gorev_i == 16'hA060 && indis < max_row)begin
+                            durum <= VERI_AL_GOREV3;
+                        end else begin
+                            //indis <= 0;
+                            ind <= 0;
+                            en_ram2 = 1;
+                            we_ram2 = 0; // okuma
+                            addr_ram2 = ind; 
+                            en_ram_htable = 0;
+                            we_ram_htable = 0; // okuma
+                            addr_ram_htable = ind; 
+                            durum <= 21;
+                        end 
+                    end 
+                    
+                    VERI_AL_GOREV3:begin
+                        if(indis < 1)begin
+                            durum <= VERI_AL_GOREV4;
+                        end else begin
+                            durum <= VERI_AL_GOREV5;
+                        end 
+                    end 
+                    
+                    VERI_AL_GOREV4:begin
+//                        if(en_gorev_i == 16'hA060)begin // gorev6
+                            if(gec < 8)begin  
+                                gec <= gec + 1;
+                                en_ram2 = 1;
+                                we_ram2 = 1; // yazma
+                                cikti_mem1[indis] <= veri_o_gorev6;
+                                data_i_ram2 <= veri_o_gorev;
+                            end else begin
+                                gec <= 0;
+                                indis <= indis + 1;
+                                durum <= VERI_AL_GOREV6;
+                            end
+//                        end else begin // gorev5 / gorev4
+//                            if(gec < 2)begin   
+//                                gec <= gec + 1;
+//                                en_ram2 = 1;
+//                                we_ram2 = 1; // yazma
+//                                cikti_mem[indis] <= veri_o_gorev;
+//                                data_i_ram2 <= veri_o_gorev;
+//                                cikti_mem1[indis] <= veri_o_gorev4;
+//                                data_i_ram_htable <= veri_o_gorev4;
+//                            end else begin
+//                                gec <= 0;
+//                                indis <= indis + 1;
+//                                durum <= VERI_AL_GOREV6;
+//                            end
+//                        end
+                    end
+                    
+                    VERI_AL_GOREV5:begin
+                        if(gec < 2)begin   //8
+                            gec <= gec + 1;
+                            en_ram2 = 1;
+                            we_ram2 = 1; // yazma
+                            cikti_mem1[indis] <= veri_o_gorev6;
+                            data_i_ram2 <= veri_o_gorev;
+//                            cikti_mem1[indis] <= veri_o_gorev4;
+                            data_i_ram_htable <= veri_o_gorev4;
+                        end else begin
+                            gec <= 0;
+                            indis <= indis + 1;
+                            durum <= VERI_AL_GOREV6;
+                        end
+                    end 
+                    
+                    VERI_AL_GOREV6:begin
+                        addr_ram2 <= indis;
+                        addr_ram_htable <= indis;
+                        durum <= VERI_AL_GOREV2;
+                    end 
+                    
+                    21:begin
+                        son_o <= 1;
+                    end 
+                    */
                     
                 endcase
             end else begin 

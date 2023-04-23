@@ -118,7 +118,7 @@ module gorev1(
    reg [17:0] ic_sayac=0;
     
    always@(posedge clk_i)begin
-        if(rst_i)begin
+        if(!rst_i)begin
             g_sayac<=0;
         end else begin
             if(en_i==1)begin
@@ -150,7 +150,6 @@ module gorev1(
                         if(gec<2)begin
                             gec<=gec+1;
                             data_i_ram1<=veri_i;
-                            //durum<=55;
                        end else begin  
                             gec<=0;                      
                             durum<=2;// indis arttır.
@@ -194,8 +193,6 @@ module gorev1(
                             indis<=0;                                                              
                             addr_ram1<=0;                 
                             ic_sayac<=0;
-//                            veri_gonder<=1;
-//                            islem_bitti_g<=1;
                             durum<=20;         
                          end
                     end
@@ -353,8 +350,7 @@ module gorev1(
                             en_ram2 = 1;
                             we_ram2 = 1;
                             gec<=gec+1;
-                            data_i_ram2<=data_o_g;                   
-//                          durum<=17; 
+                            data_i_ram2<=data_o_g;         
                           end else begin 
                             gec<=0;
                             durum<=17;
@@ -365,7 +361,6 @@ module gorev1(
                         ind_g<=ind_g+1;
                         ind<=ind+1;
                         en_g<=0;
-//                        ram1_ind<=ram1_ind+1;
                         ram2_ind<=ram2_ind+1;
                         durum<=4;
                       end
@@ -408,7 +403,7 @@ module gorev1(
                             addr_ram1<=ram1_ind;                                            
                             durum <= 24;
                         end else begin
-      
+    
                             indis<=0;
                             addr_ram1<=ram1_ind;            
                             durum<=46; 
@@ -583,8 +578,8 @@ module gorev1(
                             we_ram1=1;
                             data_i_ram1<=data_o_s; 
                             durum<=37;//en son durum.
-//                        end
                       end
+
 
                       37:begin
                          durum_oku<=durum;

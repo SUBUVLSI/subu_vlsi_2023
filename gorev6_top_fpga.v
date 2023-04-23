@@ -1,4 +1,8 @@
+
+
 `timescale 1ns / 1ps
+
+
 
 module gorev6_top_fpga
     #(parameter max_row     = 76800,
@@ -315,7 +319,7 @@ module gorev6_top_fpga
     
     gorev6 GOREV6(
     .clk_i(clk_i),
-    .rst_i(rst_i),
+    .rst_i(rstn_i),
     .en_i(en_gorev6),
     .veri_i(veri_i_gorev6),
     .veri_o(veri_o_gorev6),

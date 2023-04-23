@@ -1,24 +1,6 @@
 
 `timescale 100ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 13.04.2023 21:06:03
-// Design Name: 
-// Module Name: top_modul
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
+
 
 
 module top_modul(
@@ -91,11 +73,7 @@ module top_modul(
     initial begin
         $readmemb("D:\\vivado\\histogram_table.txt",mem1);  
     end
-    
-//    reg [7:0] memmm [0:max_row-1];
-//    initial begin
-//        $readmemb("D:\\vivado\\asil_resim.txt",memmm);  
-//    end
+
     
     integer ind = 0, indis = 0;
 
